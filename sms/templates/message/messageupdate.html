@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container justify-content-center">
+    <div class="col-md-6">
+        <div class="">
+            <h6 class="text-center">Create Message for  < Username ></h6>
+            <form method="POST">
+                {% csrf_token %}
+                {{form|crispy}}
+                <input type="submit" value="Update" class="form-control btn btn-success mt-3">
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

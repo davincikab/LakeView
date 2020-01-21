@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-3 col-lg-3 col-sm-12 mt-2">
+            <a href="{% url 'citizen-update' citizen.pk %}" class="btn btn-dark link mb-2"> Update citizen <i class="fa fa-pen ml-2"></i></a>
+            <a href="{% url 'citizen-delete' citizen.pk %} " class="btn btn-dark link mb-2"> Delete citizen <i class="fa fa-trash ml-2"></i></a>
+            <a href="/citizen/{{citizen.pk}}/message/create/" class="btn btn-dark link mb-2"> Add a Message <i class="fa fa-envelope ml-2"></i></a>
+            <button class="btn btn-dark link" data-toggle="modal" data-target="#modalData" > Add to Group<i class="fa fa-user ml-2"></i></button>
+
+            <h6>Membership</h6>
+            {% for member in members %}
+               <p> <a href="">{{member.name}}</a> </p> 
+            {% endfor %}
+        </div>
+        <div class="col-lg-5 col-md-5 col-sm-12 mt-2">
+            
+            <h3>{{ citizen.surname }} {{ citizen.first_name }} {{ citizen.last_name}}</h3>
+            <p></p>
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td>Identification Number</td>
+                        <td>{{ citizen.id_number }}</td>
+                    </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td>{{ citizen.email }}</td>
+                    </tr>
+                    <tr>
+                        <td>Gender</td>
+                        <td>{{ citizen.get_gender_display }}</td>
+                    </tr>
+                    <tr>
+                        <td>Date of Birth</td>
+                        <td>{{ citizen.dob }}</td>
+                    </tr>
+                    <tr>
+                        <td>Location</td>
+                        <td>{{ citizen.location }}</td>
+                    </tr>
+                    <tr>
+                        <td>Date of Birth</td>
+                        <td>{{ citizen.dob }}</td>
+                    </tr>
+                    <tr>
+                        <td>Phone Number</td>
+                        <td>{{ citizen.phone_number }}</td>
+                    </tr>
+                    <tr>
+                        <td>Voting Centre</td>
+                        <td>{{ citizen.voting_centre }}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12 mt-2">
+            <h6>User Issues</h6>
+            {% for message in mymessages %}
+                {% if message.is_sorted %}
+                <button class="btn btn-dark mb-2 accordion" type="button" data-toggle="collapse" data-target="#collapse{{message.pk}}"
+                    aria-expanded="false" aria-controls="collapseExample">
+                {{ message.date_created|naturalday }}
+                </button>
+                {% else %}
+                <button class="btn btn-danger mb-2 accordion" type="button" data-toggle="collapse" data-target="#collapse{{message.pk}}"
+                    aria-expanded="false" aria-controls="collapseExample">
+                    {{ message.date_created|naturalday }}
+                </button>
+                {% endif %}
+                <div class="collapse" id="collapse{{message.pk}}">
+                    <p>
+                        <small>{{ message.type_of_issue }}</small>
+                        <a href="/citizen/{{message.user.id_number}}/message/{{message.pk}}/update/"> Update </a>
+                    </p>
+                
+                        <p class="text-black">{{ message.content }}</p style="color:green">
+                        <p>{{ message.date_sorted }}</p>
+                
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Add to groups Modal  -->
+<div class="modal fade" id="modalData" tabindex="-1" role="dialog" aria-labelledby="modalData" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="modalDataLabel">Add User {{ citizen.id_number }} to Groups</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </div>
+        <div class="modal-body">
+            <form action="{% url 'add-group' %}" method="POST" id="addToGroup">
+                {% csrf_token %}
+                <input type="text" name="user" id="" value="{{ citizen.id_number }}" hidden>
+                <div class="form-group">
+                    <label for="selectgroup">Select a Grour</label>
+                    <select multiple class="form-control" name="groups" id="selectgroup">
+                        {% for group in groups %}
+                            <option value="{{ group.name}}"> {{ group.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <input type="submit" value="Add to Group(s)" class="btn btn-success">
+            </form>
+        </div>
+        <!-- <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+        </div> -->
+    </div>
+    </div>
+</div>
+
+{% endblock %}
+{% block javascript %}
+<script >
+     $("#addToGroup").on('submit', fuction(e){
+         e.preventDefault();
+        $("#modalData").modal('hide');
+    });
+</script>
+   
+{% endblock %}

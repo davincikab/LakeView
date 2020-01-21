@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <a href="{% url 'group-create'%}" class="btn btn-info"> Create Group <i class="fa fa-plus"></i></a>   
+        </div>
+        <div class="col-md-6">
+            <p>Groups Available </p>
+           
+            {% for group in groups %}
+            <table class="table table-responsive">
+                <tr>
+                    <td><h4><a href="/group/{{group.pk}}/">{{ group.name }}</a></h4></td>
+                    <td><p>{{ group.get_members|length }} members</p></td>
+                </tr>
+            </table>    
+            {% endfor %}
+        </div>
+        <div class="col-md-3">
+            <h5>Upcoming Group Events</h5>
+            <ul class="list-group">
+                <li class="list-group-item"> NCA Registration</li>
+                <li class="list-group-item">Women Meeting</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

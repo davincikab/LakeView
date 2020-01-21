@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container py-4 mt-3">
+    <h5 class="text-center"> {{form.user.value|yesno:"Update,no,Create" }} A Message</h5>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-row">
+            <div class="col-md-4 col-sm-12">
+                {{ form.user|as_crispy_field }}
+                {{ form.type_of_isssue|as_crispy_field }}
+                {{ form.is_sorted|as_crispy_field }}
+                {{ form.date_sorted|as_crispy_field }}
+            </div>
+            <div class="col-md-2">
+
+            </div>
+            <div class="col-md-6 col-sm-12">
+                {{ form.content|as_crispy_field }}
+            </div>
+        </div>
+        <input type="submit" value="{{form.user.value|yesno:'Update,no,Create' }}" class="btn btn-success form-control mt-2">
+    </form>
+</div>
+{% endblock %}

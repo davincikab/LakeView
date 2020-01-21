@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mb-3 mt-3">
+    <div class="row ">
+        <form class="form-horizontal col-md-8" method="get">
+            <input class="form-control" type="text" name="q" id="" placeholder="Id Number">
+        </form>
+        <div class="col-md-4 col-sm-12"> 
+            <a href="{% url 'citizen-create' %}" class="btn btn-info"> Add<i class="fa fa-plus ml-2"></i></a>
+        </div> 
+    </div>
+</div>
+
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <table class="table">
+                <tr>
+                    <th>Identification Number</th>
+                    <th>Names</th>
+                    <th>Gender</th>
+                </tr>
+                {% for citizen in citizens %}
+                <tr>
+                    <td><h5><a href="{% url 'citizen-detail' citizen.id_number%}">{{ citizen.id_number }}</a></h5></td>
+                    <td><p>{{ citizen.first_name }} {{ citizen.last_name }} </p></td>
+                    <td>{{ citizen.get_gender_display }}</td>
+                </tr>                
+                {% endfor %}
+            </table>
+            
+            <div class="container ml-5">
+                {% include 'paginate.html' %}
+            </div>
+            
+        </div>
+        <div class="col-md-4">
+            <!-- Messages Recent Issues -->
+            <div class="list-group">
+                <h5> Recent Messages</h5>
+                <ul class="list-group">
+                    {% for message in mymessages %}
+                        <li class="list-group-item"> {{message.content}} <small>{{message.pk}}</small></li>
+                    {% endfor %}
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

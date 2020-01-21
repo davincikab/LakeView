@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+    <h4>Usage Statics</h4>
+    <!-- Gender -->
+
+    <!-- Age -->
+
+    <!-- Period -->
+    <!-- Place -->
+{% endblock %}
+{% block javascript %}
+<script src="{% static 'highcharts.js '%}"></script>
+<script src="{% static 'exporting.js '%}"></script>
+<script src="{% static 'heatmap.js '%}"></script>
+
+<script>
+    var data = "{{ citizen }}";
+
+    data = data.replaceAll('/&quot;/', '"');
+    console.log(data);
+    data = JSON.parse(data , (key,value)=>{
+        return key == 'first_name'? value:value;
+    });
+
+    console.log(data);
+
+    $(function(){
+        $.getJSON("{% url 'list-view' %}",function(response){
+            processData(response);
+
+        });
+   
+
+    function processData(data){
+
+    }
+
+
+    function plotData(type, data, categories, title){
+        // Column plots
+        areacolors = (function () {
+            let colors = ['#d73027', '#f46d43'];
+            return colors
+        }());
+
+        function getColor(condition) {
+            return condition == "Excellent" ? '#003300' : condition == "Very Good" ? '#006600' : condition == "Good" ? '#009900' : condition == "Fair" ? '#99CC00' : condition == "Poor" ? '#FF6600' : condition == "Unknown" ? '#FF3300' : '#FF0000';
+        }
+
+        let colors = category.map(k => getColor(k));
+
+        let xAxis;
+        let series;
+
+        if (type != "line") {
+            // Check plot type
+            xAxis = [{
+                categories: category,
+                labels: {
+                    step: 0
+                },
+                legend: false
+            }];
+
+            series = {
+                label: {
+                    connectorAllowed: false,
+                },
+                stacking: 'normal',
+            }
+        } else {
+            xAxis = [{
+                crosshair: true,
+            }
+            ];
+
+            series = {
+                label: {
+                    connectorAllowed: false,
+                },
+                pointStart: 2015
+            }
+        }
+
+
+        // Column plots
+        Highcharts.chart(id, {
+            chart: {
+                backgroundColor: '#202020',
+                type: type
+            },
+            legend: {
+                enabled: false
+            },
+            credits: {
+                enabled: false
+            },
+            title: {
+                text: `${title} `
+            },
+            xAxis: xAxis,
+            yAxis: {
+                // min: 0,
+                title: {
+                    text: null
+                }, labels: {
+                    formatter: function () {
+                        return Math.abs(this.value) + '';
+                    }
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                series: series
+            },
+            series: data,
+            responsive: {
+                rules: [{
+                    condition: {
+                        maxWidth: 500
+                    },
+                    chartOptions: {
+                        legend: {
+                            layout: 'horizontal',
+                            align: 'center',
+                            verticalAlign: 'bottom'
+                        }
+                    }
+                }]
+            }
+        });
+    }
+});
+</script>
+{% endblock %}
