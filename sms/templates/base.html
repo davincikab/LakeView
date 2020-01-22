@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="{% static 'master.css' %}">
 </head>
 <body>
+    {% if user.is_authenticated %}
     <div class="navigation"> 
         <div class="text-center">
             <!-- Add a logo -->
@@ -37,12 +38,6 @@
                         <a class="nav-link" href="{% url 'group-list'%}">Groups</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'about' %}">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'about' %}">Resources</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="{% url 'stats'%}"> Statistics</a>
                     </li>
                     <li class="nav-item">
@@ -52,6 +47,7 @@
             </div>
         </div>
     </div> 
+    {% endif %}
   
     <!-- Add extract view here -->
     <div class="body">
@@ -59,11 +55,13 @@
         
         {% endblock %}
     </div>
+    {% if user.is_authenticated %}
     <footer class="bg-dark text-center text-info">
         <div class="container-fluid">
             <p>All Rights Reserved <br> &copy 2020 <br> LakeView Ward</p>
         </div>
     </footer>
+    {% endif %}
 
     <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
     <script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>

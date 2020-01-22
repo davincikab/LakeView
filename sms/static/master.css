@@ -27,16 +27,18 @@ html, body{
 
 .home-page{
     background-color: cyan;
-    padding-top:15rem;
+    padding-top:10rem;
 }
 
 .login{
-     margin-top:10rem;
+     /* margin-top:8rem; */
+     margin:10rem 1rem 0rem 1rem;
 }
 
 .container-fluid {
     margin:0%;
     padding:0%;
+    overflow: hidden;
 }
 
 .accordion, .link{
@@ -63,3 +65,5 @@ footer{
   border-radius: 0.25rem;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
+
+/* WORKING WITH MEDIA QUERIES */

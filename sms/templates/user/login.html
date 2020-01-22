@@ -1,22 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}
+    Login
+{% endblock %}
 {% load crispy_forms_tags %}
 {% load static %}
 {% block content %}
-    <link rel="stylesheet" href="{% static 'vendor/bootstrap/css/bootstrap.css' %}">
-    <link rel="stylesheet" href="{% static 'vendor/fontawesome-free/css/all.css' %}">
-    <link rel="stylesheet" href="{% static 'master.css' %}">
     <style>
         body{
             background-color: aqua;
         }
     </style>
     <div class="container-fluid">
-        <div class=" col-md-6 col-sm-8 col-xs-8 container  bg-dark text-white py-5 login">
-            <p class="text-center h4">Login</p>
-            <form action="{% url 'login' %}" method="POST" class="form-horizontal">
-                {% csrf_token %}
-                {{form|crispy}}
-                <input type="submit" name="Login" class="form-control mt-2 btn-info" >
-            </form>
+        <div class="row">
+            <div class="col-md-6 col-sm-8 col-xs-8 container bg-dark text-white login py-2">
+                <p class="text-center h4">Login</p>
+                <form action="{% url 'login' %}" method="POST" class="form-horizontal">
+                    {% csrf_token %}
+                    {{form|crispy}}
+                    <input type="submit" name="Login" class="form-control mt-2 btn-info">
+                </form>
+            </div>
         </div>
     </div>
+{% endblock %}
+{% block javascript %}
+
 {% endblock %}
