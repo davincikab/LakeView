@@ -35,12 +35,6 @@ class CitizenListView(ListView):
         return context
     
 
-class CitizenCreateView(CreateView,LoginRequiredMixin):
-    model = Citizen
-    fields = "__all__"
-    template_name = "citizen/citizencreate.html"
-
-
 class CitizenDetailView(DetailView,LoginRequiredMixin):
     model = Citizen
     context_object_name = "citizen"
@@ -63,9 +57,6 @@ class CitizenCreateView(CreateView,LoginRequiredMixin):
     context_object_name = "citizen"
     template_name = "citizen/citizenupdate.html"
     fields = "__all__"
-
-    def post(self,*args, **kwargs):
-        pass
 
 class CitizenUpdateView(UpdateView,LoginRequiredMixin):
     model = Citizen
