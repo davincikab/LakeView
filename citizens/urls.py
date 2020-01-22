@@ -31,10 +31,10 @@ urlpatterns = [
 
     # Others
     path('addtogroup/',add_to_group,name="add-group"),
-    path('about/', about, name="about"),
     path('statistic/',statistics, name="stats"),
 
     # Contacts
+    path('googled764035286992e26.html', about, name='about', ),
     path('contacts/', test_contacts_api,name='contacts'),
     path('authorize/', authorize, name= 'authorize'),
     path('oauth2callback/', oauth2callback, name='oauth2callback'),

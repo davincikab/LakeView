@@ -137,7 +137,7 @@ class GroupCreateView(CreateView,LoginRequiredMixin):
     model = Group
     template_name = "groups/group_create.html"
     fields = "__all__"
-    
+
     def post(self, *args, **kwargs):
         form = self.get_form()
         if form.is_valid():
@@ -180,7 +180,7 @@ def statistics(request):
     return render(request,'statistics.html', context)
 
 def about(request):
-    return render(request,'about.html')
+    return render(request,'googled764035286992e26.html')
 
 def add_to_group(request):
     if request.method == 'POST':
