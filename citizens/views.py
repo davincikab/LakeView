@@ -137,7 +137,7 @@ class GroupCreateView(CreateView,LoginRequiredMixin):
     model = Group
     template_name = "groups/group_create.html"
     fields = "__all__"
-
+    
     def post(self, *args, **kwargs):
         form = self.get_form()
         if form.is_valid():
@@ -148,7 +148,6 @@ class GroupCreateView(CreateView,LoginRequiredMixin):
     def form_valid(self,form):
         self.object = form.save(commit=False)
         self.object.save()
-        # self.object.restrict_gender()
         return HttpResponseRedirect(self.get_success_url())
     
     def form_invalid(self,form):

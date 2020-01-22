@@ -14,6 +14,30 @@ html, body{
     width: 100%;
     /* position:fixed; */
 }
+.navbar-brand{
+    font-size:3em;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-style: normal;
+}
+
+.home{
+    height:80vh;
+    background-color: cyan;
+}
+
+.home-page{
+    background-color: cyan;
+    padding-top:15rem;
+}
+
+.login{
+     margin-top:10rem;
+}
+
+.container-fluid {
+    margin:0%;
+    padding:0%;
+}
 
 .accordion, .link{
     width:100%;

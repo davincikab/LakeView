@@ -87,18 +87,6 @@ class Group(models.Model):
     def get_members(self):
         return self.members.all()
 
-    def restrict_gender(self):
-        # Sanitize the database
-        for member in self.get_members():
-            if member.gender == 'M' and self.name == "Women":
-                self.members.remove(member)
-            elif member.gender == 'F' and self.name == "Men":
-                self.members.remove(member)
-        return self.get_members()
-                
-                
-        return self.members
-
 # class GroupEvents(models.Model):
 #     group = models.ForeignKey("Group", on_delete=models.CASCADE)
 #     title = models.CharField(max_length=150)

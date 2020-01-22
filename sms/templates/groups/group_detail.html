@@ -1,30 +1,38 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="container">
+<div class="container mt-5">
     <div class="row">
         <div class="col-md-2">
             <a href="{% url 'group-update' group.pk %}" class="btn btn-info mb-2"> Update Group <i class="fa fa-pen"></i></a>
-            <a href="{% url 'group-delete' group.pk %}" class="btn btn-danger"> Delete Group <i class="fa fa-trash"></i></a>
+            <a href="{% url 'group-delete' group.pk %}" class="btn btn-danger mb-2"> Delete Group <i class="fa fa-trash"></i></a>
         </div>
         <div class="col-md-6">
             <h1>{{ group.name }}</h1>
             <!-- Group Statistics -->
+            <tr>
+                <td>Number of Members</td>
+                <td>{{group.get_members|length}}</td>
+            </tr>
             <table class="table">
-                <tbody>
+                <thead>
                     <tr>
-                        <td>Number of Members</td>
-                        <td>{{group.get_members|length}}</td>
+                        <th>First Name</th>
+                        <th></th>
                     </tr>
+                </thead>
+                <tbody>
+                    {% for member in group.get_members %}
+                    <tr>
+                        <td>{{member.first_name}}</td>
+                        <td>{{member.last_name}}</td>
+                        <td>{{member.id_number}}</td>
+                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
             
-            {% for member in group.get_members %}
-                <tr>
-                    <td>{{member.first_name}}</td>
-                    <td>{{member.last_name}}</td>
-                    <td>{{member.id_number}}</td>
-                </tr>
-            {% endfor %}
+        
+            
             
         </div>
         <div class="col-md-4">

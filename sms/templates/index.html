@@ -1,5 +1,24 @@
 {% extends 'base.html' %}
+{% block title %}
+    Home
+{% endblock %}
 {% block content %}
-    <h5>Welcome Django</h5>
-    <h2>{{data}}</h2>
+    <div class="container-fluid">
+        <div class="home">
+            <div class="container home-page text-center">
+                <div class="justify-content-center">
+                    <h2 class="">Lakeview Ward, Nakuru County</h2>
+                    <div class="button-group ">
+                        <a href="{% url 'list-view' %}" class="btn btn-lg btn-warning pl-2">People</a>
+                        <a href="{% url 'group-list' %}" class="btn btn-lg btn-success pl-3">Groups</a>
+                    </div>
+                    <p>
+                        A detailed description of what the application is doing. A detailed description of what the application is doing
+                        A detailed description of what the application is doing. A detailed description of what the application is doing. A detailed 
+                        description of what the application is doing. A detailed description of what the application is doing
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
