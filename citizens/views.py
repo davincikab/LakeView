@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.staticfiles.storage import staticfiles_storage
+from django.templatetags.static import static
 
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -25,7 +26,7 @@ def home(request):
     return render(request,'index.html', context)
 
 
-class CitizenListView(ListView):
+class CitizenListView(LoginRequiredMixin, ListView):
     model = Citizen
     context_object_name = 'citizens'
     template_name  = 'citizen/citizenlist.html'
@@ -43,7 +44,7 @@ class CitizenListView(ListView):
         return context
     
 
-class CitizenDetailView(DetailView,LoginRequiredMixin):
+class CitizenDetailView(LoginRequiredMixin, DetailView):
     model = Citizen
     context_object_name = "citizen"
     template_name = "citizen/citizendetail.html"
@@ -60,7 +61,7 @@ class CitizenDetailView(DetailView,LoginRequiredMixin):
         return super().get_queryset()
 
 
-class CitizenCreateView(CreateView,LoginRequiredMixin):
+class CitizenCreateView(LoginRequiredMixin, CreateView):
     model = Citizen
     context_object_name = "citizen"
     template_name = "citizen/citizenupdate.html"
@@ -73,13 +74,13 @@ class CitizenUpdateView(UpdateView,LoginRequiredMixin):
     fields = "__all__"
 
 
-class CitizenDeleteView(DeleteView,LoginRequiredMixin):
+class CitizenDeleteView(LoginRequiredMixin,DeleteView):
     model = Citizen
     template_name = "citizen/citizendelete.html"
     success_url = reverse_lazy("list-view")
 
 
-class MessagesCreateView(CreateView,LoginRequiredMixin):
+class MessagesCreateView(LoginRequiredMixin, CreateView):
     model = Messages
     fields = ['type_of_isssue', 'is_sorted','content', 'date_sorted']
     template_name = "message/messageupdate.html"
@@ -104,12 +105,14 @@ class MessagesCreateView(CreateView,LoginRequiredMixin):
         # Add a message on field not creates
         return HttpResponseRedirect(self.get_success_url())
 
-class MessagesUpdateView(UpdateView, LoginRequiredMixin):
+
+class MessagesUpdateView(LoginRequiredMixin, UpdateView):
     model = Messages
     template_name = "message/messagecreate.html"
     fields = "__all__"
 
-class GroupListView(ListView,LoginRequiredMixin):
+
+class GroupListView(LoginRequiredMixin, ListView):
     model = Group
     context_object_name = "groups"
     template_name = 'groups/group_list.html'
@@ -122,7 +125,7 @@ class GroupListView(ListView,LoginRequiredMixin):
         return context
 
 
-class GroupDetailView(DetailView,LoginRequiredMixin):
+class GroupDetailView(LoginRequiredMixin, DetailView):
     model = Group
     context_object_name = "group"
     template_name = 'groups/group_detail.html'
@@ -134,12 +137,14 @@ class GroupDetailView(DetailView,LoginRequiredMixin):
     def get_queryset(self):
         return super().get_queryset()
 
-class GroupUpdateView(UpdateView,LoginRequiredMixin):
+
+class GroupUpdateView(LoginRequiredMixin, UpdateView):
     model = Group
     template_name = "groups/group_update.html"
     fields = "__all__"
 
-class GroupCreateView(CreateView,LoginRequiredMixin):
+
+class GroupCreateView(LoginRequiredMixin,CreateView):
     model = Group
     template_name = "groups/group_create.html"
     fields = "__all__"
@@ -159,7 +164,7 @@ class GroupCreateView(CreateView,LoginRequiredMixin):
     def form_invalid(self,form):
         return HttpResponseRedirect(reverse('group-list'))
 
-class GroupDeleteView(DeleteView,LoginRequiredMixin):
+class GroupDeleteView(LoginRequiredMixin,DeleteView):
     model = Group
     template_name = "groups/group_delete.html"
     success_url = reverse_lazy("group-list")
@@ -172,11 +177,16 @@ def searchCitizen(id=None):
         results = Citizen.objects.filter(pk=id)
     return results
 
+
+@login_required(login_url='/user/login')
 def citizen_data_to_csv(request):
     # Convert the contacts to a csv file. Filter the non synced contacts Save the csv. Redirect to google contacts import page
     date = timezone.now()
-    CONTACT = staticfiles_storage.path("contacts.csv")
-    with open(CONTACT, mode='w') as file:
+    from django.contrib.staticfiles.finders import find
+    file_path = "contacts.csv"
+    abs_path = find(file_path)
+    
+    with open(abs_path, mode='w') as file:
         fields = ['Name','Given Name','Additional Name','Family Name','Yomi Name','Given Name Yomi',
                 'Additional Name Yomi','Family Name Yomi','Name Prefix','Name Suffix','Initials',
                 'Nickname','Short Name','Maiden Name','Birthday','Gender','Location','Billing Information',
@@ -204,20 +214,28 @@ def citizen_data_to_csv(request):
         file.close()
 
     return HttpResponse("Successfully converted data to csv")
-  
+
+
+@login_required(login_url='/user/login')
 def statistics(request):
     citizen_count = Citizen.objects.all().count()
     group_count = Group.objects.all().count()
     return render(request,'statistics.html', {'citizen':citizen_count,'group':group_count})
 
+
+@login_required(login_url='/user/login')
 def data_analysis(request):
     citizen = serialize('json', Citizen.objects.all())
     groups = serialize('json',Group.objects.all())
     return HttpResponse(json.dumps({'citizen':citizen,'groups':groups}))
 
+
+@login_required(login_url='/user/login')
 def about(request):
     return render(request,'googled764035286992e26.html')
 
+
+@login_required(login_url='/user/login')
 def add_to_group(request):
     if request.method == 'POST':
         data = request.POST.copy()

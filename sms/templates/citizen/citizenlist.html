@@ -7,8 +7,8 @@
             <input class="form-control" type="text" name="q" id="" placeholder="Id Number">
         </form>
         <div class="col-md-4 col-sm-12"> 
-            <a href="{% url 'citizen-create' %}" class="btn btn-info"> Add<i class="fa fa-plus ml-2"></i></a>
-            <a class="nav-link" href="{% get_static_prefix %}contacts.csv"> Statistics</a>
+            <a href="{% url 'citizen-create' %}" class="btn btn-info mb-2"> Add<i class="fa fa-plus ml-2"></i></a>
+            <button class="btn btn-info mb-2" onclick="updateCSV()">Update Download Contacts</button>
         </div> 
     </div>
 </div>
@@ -51,4 +51,23 @@
     </div>
 </div>
 
+{% endblock %}
+{% block javascript %}
+<script>
+    function updateCSV(){
+        console.log("CSV");
+
+        $.ajax({
+            url:"{% url 'downup' %}",
+            type:'GET',
+            data:{},
+            success:function(response){
+                alert(response);
+            },
+            error:function(e){
+                alert("Failed to update the csv file");
+            }
+        });
+    }
+</script>
 {% endblock %}
