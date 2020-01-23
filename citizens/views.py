@@ -1,15 +1,23 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseRedirect, HttpResponse
+
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.staticfiles.storage import staticfiles_storage
+
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+
+from django.conf import settings
+from django.utils import timezone
+from django.core.serializers import serialize
+
 from .models import Citizen, Messages, Group
 from django.urls import reverse_lazy, reverse, resolve
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.conf import settings
-from django.contrib.staticfiles.storage import staticfiles_storage
+
 import os
-from django.core.serializers import serialize
+import csv
+
 
 @login_required(login_url='/user/login')
 def home(request):
@@ -96,8 +104,6 @@ class MessagesCreateView(CreateView,LoginRequiredMixin):
         # Add a message on field not creates
         return HttpResponseRedirect(self.get_success_url())
 
-
-
 class MessagesUpdateView(UpdateView, LoginRequiredMixin):
     model = Messages
     template_name = "message/messagecreate.html"
@@ -165,6 +171,38 @@ def searchCitizen(id=None):
     else:
         results = Citizen.objects.filter(pk=id)
     return results
+
+def citizen_data_to_csv(request):
+    # Convert the contacts to a csv file
+    # Filter the non synced contacts
+    # Save the csv
+    # Redirect to google contacts import page
+    date = timezone.now()
+    CONTACT = staticfiles_storage.path("contacts.csv")
+    with open(CONTACT, mode='w') as file:
+        fields = ['Name','Given Name','Additional Name','Family Name','Yomi Name','Given Name Yomi',
+                'Additional Name Yomi','Family Name Yomi','Name Prefix','Name Suffix','Initials',
+                'Nickname','Short Name','Maiden Name','Birthday','Gender','Location','Billing Information',
+                'Directory Server','Mileage','Occupation','Hobby','Sensitivity','Language','Photo','Group Membership',
+                'Phone 1 - Type','Phone 1 - Value'
+        ]
+
+        csv_file= csv.DictWriter(file, fieldnames=fields)
+        csv_file.writeheader()
+        for citizen in Citizen.objects.all():
+            groups = '::'.join([gp.name for gp in citizen.group_set.all()])
+            #"Women ::: Farmer ::: * coworkers ::: * friends ::: * myContacts"
+            csv_file.writerow(
+                {'Name':citizen.first_name,'Given Name':citizen.last_name,'Additional Name':'','Family Name':citizen.surname,'Yomi Name':'','Given Name Yomi':'',
+                'Additional Name Yomi':'', 'Family Name Yomi':'', 'Name Prefix':'', 'Name Suffix':'', 'Initials':'',
+                'Nickname':'', 'Short Name':'', 'Maiden Name':'', 'Birthday':citizen.dob, 'Gender':citizen.get_gender_display(), 'Location':citizen.location,'Billing Information':'',
+                'Directory Server':'', 'Mileage':'', 'Occupation':'', 'Hobby':'', 'Sensitivity':'', 'Language':'', 'Photo':'', 'Group Membership':groups,
+                'Phone 1 - Type':'Mobile', 'Phone 1 - Value':f"+254 {int(citizen.phone_number)}"
+                }
+            )
+        file.close()
+
+    return HttpResponse("Successfully converted data to csv")
 
 # Using F() for better queries
 class sendMessage:

@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
 <div class="container mb-3 mt-3">
     <div class="row ">
@@ -7,11 +8,10 @@
         </form>
         <div class="col-md-4 col-sm-12"> 
             <a href="{% url 'citizen-create' %}" class="btn btn-info"> Add<i class="fa fa-plus ml-2"></i></a>
+            <a class="nav-link" href="{% get_static_prefix %}contacts.csv"> Statistics</a>
         </div> 
     </div>
 </div>
-
-
 
 <div class="container">
     <div class="row">
