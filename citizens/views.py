@@ -198,7 +198,7 @@ def citizen_data_to_csv(request):
         csv_file.writeheader()
         for citizen in Citizen.objects.filter(uploaded_to_google=False):
             # Get the groups and padd with double colon
-            groups = '::'.join([gp.name for gp in citizen.group_set.all()])
+            groups = ' ::: '.join([gp.name for gp in citizen.group_set.all()])
             #"Women ::: Farmer ::: * coworkers ::: * friends ::: * myContacts"
             csv_file.writerow(
                 {'Name':citizen.first_name,'Given Name':citizen.last_name,'Additional Name':'','Family Name':citizen.surname,'Yomi Name':'','Given Name Yomi':'',
