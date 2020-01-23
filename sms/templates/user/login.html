@@ -13,7 +13,7 @@
             margin:m;
         }
     </style>
-    <div class="container-fluid">
+    <div class="container-fluid ml-2">
         <div class="row container">
             <div class="col-md-4"></div>
             <div class="col-md-6 col-sm-8 col-xs-8  bg-dark text-white login py-2">
@@ -21,7 +21,7 @@
                 <form action="{% url 'login' %}" method="POST" class="form-horizontal">
                     {% csrf_token %}
                     {{form|crispy}}
-                    <input type="submit" name="Login" class="form-control mt-2 btn-info">
+                    <input type="submit" name="Login" class="form-control mt-2 btn-info" value="Login">
                 </form>
             </div>
         </div>
