@@ -2,58 +2,59 @@
 {% load static %}
 {% load humanize %}
 {% block content %}
-    <h4>Usage Statics</h4>
+   <div class="row">
+
+   </div>
     <!-- Gender -->
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-4">
                 <div class="row">
                     <div class="card">
-                        <div class="card-header"></div>
-                        <div class="card-body">
-
+                        <div class="card-body text-center">
+                            <div class="row stats">
+                                <div class="col-md-6 col-sm-12">
+                                    <h5>Citizens</h5>
+                                    <h2>{{citizen}}</h2>
+                                </div>
+                                <div class="col-md-6 col-sm-12 border-left">
+                                    <h5>Groups</h5>
+                                    <h2>{{group}}</h2>
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-footer"></div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="card">
-                        <div class="card-header"></div>
-                        <div class="card-body">
-
+                        <div class="card-body text-center">
+                            <div id="bar-citizen"></div>
                         </div>
-                        <div class="card-footer"></div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="card">
-                        <div class="card-header"></div>
                         <div class="card-body">
-
+                            <div id="column-gender"></div>
                         </div>
-                        <div class="card-footer"></div>
                     </div>
                 </div>
             </div>
             <div class="col-md-8">
                 <div class="row">
                     <div class="card">
-                        <div class="card-header"></div>
                         <div class="card-body">
+                            <div id="bar-group">
 
+                            </div>
                         </div>
-                        <div class="card-footer"></div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row map">
                     <div class="card">
-                        <div class="card-header">
-                            Map
-                        </div>
                         <div class="card-body">
-                            
+                            <div id="map"></div>
                         </div>
-                        <div class="card-footer"></div>
                     </div>
                 </div>
             </div>
@@ -66,33 +67,125 @@
 {% endblock %}
 {% block javascript %}
 <script src="{% static 'highcharts.js '%}"></script>
-<script src="{% static 'exporting.js '%}"></script>
-<script src="{% static 'heatmap.js '%}"></script>
+<link rel="stylesheet" href="{% static 'leaflet/leaflet.css' %}">
+<script src="{% static 'leaflet/leaflet.js '%}"></script>
+<!-- <script src="{% static 'exporting.js '%}"></script> -->
+<!-- <script src="{% static 'heatmap.js '%}"></script> -->
 
 <script>
-    var data = "{{ citizen }}";
+    $(function(){
+    
+    var groups;
+    var groupArrayData;
+    var voting_center;
+    var gender = ["Male", "Female"];
+    var message;
 
-    data = data.replaceAll('/&quot;/', '"');
-    console.log(data);
-    data = JSON.parse(data , (key,value)=>{
-        return key == 'first_name'? value:value;
+     $.getJSON("{% url 'data' %}")
+            .done(function (data) {
+                processData(data);
+                createMap(data);
+            }).fail(function () {
+                alert("Failed to load data");
     });
 
-    console.log(data);
+     function processData(data) {
+        var citizen = JSON.parse(data.citizen);
+        voting_center = [...new Set(citizen.map(data => data.fields.voting_centre))]
+        citizenData(citizen, voting_center);
+        genderGroups(citizen,['F','M']);
 
-    $(function(){
-        $.getJSON("{% url 'list-view' %}",function(response){
-            processData(response);
+        var groupsRawData = JSON.parse(data.groups)
+        groups = [...new Set(groupsRawData.map(data => data.fields.name))];
+        groupData(groupsRawData, groups);
+    }
 
-        });
+    function createMap(data) {
+            var map = L.map('map').setView([-0.7502489362943767, 36.44471844195051], 13);
+
+            // Add a tilelayer
+            var layer = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}' + (L.Browser.retina ? '@2x.png' : '.png'), {
+                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attributions">CARTO</a>',
+                subdomains: 'abcd',
+                maxZoom: 20,
+                minZoom: 0
+            });
+
+            layer.addTo(map);        
+
+            //  Voting centres Data
+            var circleMarkerStyles = {
+                fillColor: '#e6550d', 
+                color:'#e6550d',
+                fillOpacity: 0.6, 
+                weight: 0.2
+            };
+
+            circleMarkerStyles['radius'] = groupArrayData[0]*2 || 10;
+            var unity = L.circleMarker([-0.7696, 36.4583], circleMarkerStyles).bindPopup(groupArrayData[0]+" Citizens");
+            
+            circleMarkerStyles['radius'] = groupArrayData[1] * 2 || 10;
+            var lakeview = L.circleMarker([-0.7336, 36.4344], circleMarkerStyles).bindPopup(groupArrayData[1] + " Citizens");
+
+            circleMarkerStyles['radius'] = groupArrayData[2] * 2 || 10;
+            var kihotoBusiness = L.circleMarker([-0.72755, 36.43017], circleMarkerStyles).bindPopup(groupArrayData[2] + " Citizens");
+
+            circleMarkerStyles['radius'] = groupArrayData[3] * 2 || 10;
+            var chiefKayole = L.circleMarker([-0.7522, 36.4606], circleMarkerStyles).bindPopup(groupArrayData[3] + " Citizens");
+
+            // Load the circle marker as feature group
+            var votingCentres = L.featureGroup([unity,chiefKayole,lakeview,kihotoBusiness]).addTo(map);
+
+            // Regions Data
+            var region = L.geoJSON(null).addTo(map);
+
+            var baselayers = {};
+            var overlays = {
+                'Voting Center': votingCentres,
+                'Regions':region
+            };
+
+            L.control.layers(baselayers,overlays).addTo(map);
+    }
    
-
-    function processData(data){
+    function extractAgeGroups(data){
+        var ageLabels = ["Youth", "Middle Age","Old Age"];
 
     }
 
+    function genderGroups(data, genders){
+        var genderData = [];
+        for(let gender of genders){
+            genderData.push(data.filter(datum=> datum.fields.gender == gender).length)
+        }
+        plotData('column', 'column-gender', [{ name: 'Gender', data: genderData ,color:'#beaed4'}], gender, 'Gender Statistics')
+    }
 
-    function plotData(type, data, categories, title){
+    function groupData(groups,categoryGroups){
+        var dataValues = [];
+        console.log(groups);
+
+        for(let group of groups){
+            dataValues.push(group.fields.members.length)
+        }
+        console.log(dataValues);
+        
+        plotData('column','bar-group', [{name:'Groups', data:dataValues, color: '#beaed4'}],categoryGroups,'Group Statistics')
+    }
+
+    function citizenData(citizens, votingCenters){
+        var dataValues = [];
+
+        for(let votingCenter of votingCenters){
+            dataValues.push(citizens.filter(citizen => citizen.fields.voting_centre == votingCenter).length);
+        }
+        // console.log(dataValues);
+        groupArrayData = dataValues;
+        console.log(votingCenters);
+        plotData('column', 'bar-citizen', [{ name: 'Voting Centers', data: dataValues, color: '#beaed4' }], votingCenters, 'Voting Centre Statistic')
+    }
+
+    function plotData(type,id, data, category, title){
         // Column plots
         areacolors = (function () {
             let colors = ['#d73027', '#f46d43'];
@@ -142,7 +235,7 @@
         // Column plots
         Highcharts.chart(id, {
             chart: {
-                backgroundColor: '#202020',
+                backgroundColor: '#ffffff',
                 type: type
             },
             legend: {

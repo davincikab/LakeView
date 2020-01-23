@@ -18,7 +18,7 @@ class Citizen(models.Model):
     phone_number = models.CharField("Phone Number", max_length=12, blank=True, default='0704893840')
     dob = models.DateField('Date of Birth', auto_now=False, auto_now_add=False, default=timezone.now())
     voting_centre = models.CharField('Voting Centre', max_length=50, default='Unity Primary School')
-    
+    uploaded_to_google = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.id_number) + ' '+ self.first_name

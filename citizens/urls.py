@@ -32,6 +32,7 @@ urlpatterns = [
     # Others
     path('addtogroup/',add_to_group,name="add-group"),
     path('statistic/',statistics, name="stats"),
+    path('data/', data_analysis, name="data"),
 
     # Contacts
     path('googled764035286992e26.html', about, name='about', ),

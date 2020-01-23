@@ -17,7 +17,7 @@ from django.urls import reverse_lazy, reverse, resolve
 
 import os
 import csv
-
+import json
 
 @login_required(login_url='/user/login')
 def home(request):
@@ -173,10 +173,7 @@ def searchCitizen(id=None):
     return results
 
 def citizen_data_to_csv(request):
-    # Convert the contacts to a csv file
-    # Filter the non synced contacts
-    # Save the csv
-    # Redirect to google contacts import page
+    # Convert the contacts to a csv file. Filter the non synced contacts Save the csv. Redirect to google contacts import page
     date = timezone.now()
     CONTACT = staticfiles_storage.path("contacts.csv")
     with open(CONTACT, mode='w') as file:
@@ -189,7 +186,8 @@ def citizen_data_to_csv(request):
 
         csv_file= csv.DictWriter(file, fieldnames=fields)
         csv_file.writeheader()
-        for citizen in Citizen.objects.all():
+        for citizen in Citizen.objects.filter(uploaded_to_google=False):
+            # Get the groups and padd with double colon
             groups = '::'.join([gp.name for gp in citizen.group_set.all()])
             #"Women ::: Farmer ::: * coworkers ::: * friends ::: * myContacts"
             csv_file.writerow(
@@ -200,22 +198,22 @@ def citizen_data_to_csv(request):
                 'Phone 1 - Type':'Mobile', 'Phone 1 - Value':f"+254 {int(citizen.phone_number)}"
                 }
             )
+            #Update the uploaded to google account 
+            citizen.uploaded_to_google = True
+            citizen.save()
         file.close()
 
     return HttpResponse("Successfully converted data to csv")
-
-# Using F() for better queries
-class sendMessage:
-    def sendToGroup(self):
-        pass
-
-    def sendToIndividual(self):
-        pass
-    
+  
 def statistics(request):
-    context = {'citizen': serialize('json', Citizen.objects.all())}
-    context['groups'] = serialize('json',Group.objects.all())
-    return render(request,'statistics.html', context)
+    citizen_count = Citizen.objects.all().count()
+    group_count = Group.objects.all().count()
+    return render(request,'statistics.html', {'citizen':citizen_count,'group':group_count})
+
+def data_analysis(request):
+    citizen = serialize('json', Citizen.objects.all())
+    groups = serialize('json',Group.objects.all())
+    return HttpResponse(json.dumps({'citizen':citizen,'groups':groups}))
 
 def about(request):
     return render(request,'googled764035286992e26.html')
