@@ -330,3 +330,9 @@ def credentials_to_dict(credentials):
 
 def clear_credentials(request):
     pass
+
+
+# TODO
+#  REMOVE DEGUG = TRUE
+#  TEST THE APP WITH THE CLIENT
+# 

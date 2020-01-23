@@ -9,10 +9,14 @@
         body{
             background-color: aqua;
         }
+        .login{
+            margin:m;
+        }
     </style>
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-6 col-sm-8 col-xs-8 container bg-dark text-white login py-2">
+        <div class="row container">
+            <div class="col-md-4"></div>
+            <div class="col-md-6 col-sm-8 col-xs-8  bg-dark text-white login py-2">
                 <p class="text-center h4">Login</p>
                 <form action="{% url 'login' %}" method="POST" class="form-horizontal">
                     {% csrf_token %}
