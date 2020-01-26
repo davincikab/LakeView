@@ -1,16 +1,36 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
-<div class="container justify-content-center">
-    <div class="col-md-6">
-        <div class="">
+<div class="container justify-content-center my-2 py-2">
+    <div class="col-md-6 offset-3 border">
+        <div class="py-2 d-block">
             <h6 class="text-center">Create Message for  < Username ></h6>
             <form method="POST">
                 {% csrf_token %}
-                {{form|crispy}}
+                {{ form|crispy }}
                 <input type="submit" value="Update" class="form-control btn btn-success mt-3">
             </form>
         </div>
     </div>
 </div>
+{% endblock %}
+{% block javascript %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.23.0/moment.min.js"
+        integrity="sha256-VBLiveTKyUZMEzJd6z2mhfxIqz3ZATCuVMawPZGzIfA=" crossorigin="anonymous"></script>
+    
+    <!-- Tempus Dominus Bootstrap 4 -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/css/tempusdominus-bootstrap-4.min.css"
+        integrity="sha256-XPTBwC3SBoWHSmKasAk01c08M6sIA5gF5+sRxqak2Qs=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.min.js"
+        integrity="sha256-z0oKYg6xiLq3yJGsp/LsY9XykbweQlHl42jHv2XTBz4=" crossorigin="anonymous"></script>
+
+    <script>
+        // Implement a datetimepicker
+         $(function () {
+            $("#div_id_date_sorted").datetimepicker({
+                format: 'Y-m-d H:i:s',
+            });
+        });
+    </script>
 {% endblock %}

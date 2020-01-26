@@ -1,17 +1,17 @@
 {% extends 'base.html' %}
 {% load humanize %}
 {% block content %}
-<div class="container">
+<div class="container my-3">
     <div class="row">
         <div class="col-md-3 col-lg-3 col-sm-12 mt-2">
             <a href="{% url 'citizen-update' citizen.pk %}" class="btn btn-dark link mb-2"> Update citizen <i class="fa fa-pen ml-2"></i></a>
-            <a href="{% url 'citizen-delete' citizen.pk %} " class="btn btn-dark link mb-2"> Delete citizen <i class="fa fa-trash ml-2"></i></a>
+            <a href="{% url 'citizen-delete' citizen.pk %} " class="btn btn-dark text-danger link mb-2"> Delete citizen <i class="fa fa-trash ml-2"></i></a>
             <a href="/citizen/{{citizen.pk}}/message/create/" class="btn btn-dark link mb-2"> Add a Message <i class="fa fa-envelope ml-2"></i></a>
             <button class="btn btn-dark link" data-toggle="modal" data-target="#modalData" > Add to Group<i class="fa fa-user ml-2"></i></button>
 
-            <h6>Membership</h6>
+            <h4 class="mt-5">Membership</h4>
             {% for member in members %}
-               <p> <a href="">{{member.name}}</a> </p> 
+               <i class="text-info" >{{member.name}},</i>
             {% endfor %}
         </div>
         <div class="col-lg-5 col-md-5 col-sm-12 mt-2">
@@ -99,7 +99,7 @@
                 {% csrf_token %}
                 <input type="text" name="user" id="" value="{{ citizen.id_number }}" hidden>
                 <div class="form-group">
-                    <label for="selectgroup">Select a Grour</label>
+                    <label for="selectgroup">Select a Group</label>
                     <select multiple class="form-control" name="groups" id="selectgroup">
                         {% for group in groups %}
                             <option value="{{ group.name}}"> {{ group.name }}</option>
@@ -120,8 +120,8 @@
 {% endblock %}
 {% block javascript %}
 <script >
-     $("#addToGroup").on('submit', fuction(e){
-         e.preventDefault();
+     $("#addToGroup").on('submit', function(e){
+        //  e.preventDefault();
         $("#modalData").modal('hide');
     });
 </script>

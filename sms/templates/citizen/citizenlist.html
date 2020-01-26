@@ -42,7 +42,7 @@
                 <h5> Recent Messages</h5>
                 <ul class="list-group">
                     {% for message in mymessages %}
-                        <li class="list-group-item"> {{message.content}} <small>{{message.pk}}</small></li>
+                        <li class="list-group-item"> {{message.content}} <small><a href="{% url 'citizen-detail' message.user.id_number %}">{{message.pk}}</a></small></li>
                     {% endfor %}
                 </ul>
                 

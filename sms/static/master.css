@@ -1,8 +1,9 @@
 html, body{
     margin:0%;
     padding:0%;
-    font-family: Arial, Helvetica, sans-serif;
-    font-style: italic;
+    font-style: normal;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 0.96em;
 }
 
 #navbar{
@@ -15,24 +16,23 @@ html, body{
     /* position:fixed; */
 }
 .navbar-brand{
-    font-size:3em;
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-    font-style: normal;
+    font-size:1.8em;
+    color:
 }
 
 .home{
     height:80vh;
-    background-color: cyan;
+    /* background-color: cyan; */
 }
 
 .home-page{
-    background-color: cyan;
+    /*  background-color: cyan; */
     padding-top:10rem;
 }
 
 .login{
      /* margin-top:8rem; */
-     margin:10rem 1rem 0rem 1rem;
+     margin:5rem 1rem 0rem 1rem;
 }
 
 .container-fluid {
@@ -84,7 +84,12 @@ footer{
 .card, .card-body{
     width:100%;
     height: auto;
+    padding: 0%;
    
+}
+
+.card-footer{
+    padding:0%;
 }
 
 .stats h2{

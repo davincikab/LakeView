@@ -3,6 +3,9 @@
 # import gdata.contacts.client
 # import gdata.contacts.data
 
+import googleapiclient.discovery
+import google_auth_oauthlib.flow
+import google.oauth2.credentials
 gd_client = gdata.contacts.client.ContactsClient(source="<APP NAME>")
 
 def create_contact(gd_client, data):
@@ -116,3 +119,92 @@ def delete_contact(gd_client, data, contact_url):
         if e.status == 412:
             # Hand the Etaf problem
             # pass
+
+            # ======================
+
+            # Batch a processing
+            # send POT REQEUST TO https://www.google.com/m8/feeds/groups/{userEmail}/full/batch
+
+
+CLIENTS_SECRETS_FILE = staticfiles_storage.path("client_secret.json")
+SCOPES = ['https://www.google.com/m8/feeds/']
+
+API_SERVICE_NAME = 'contacts'
+API_VERSION = 'v3'
+
+
+def test_contacts_api(request):
+    # Client and scopes
+    if 'credentials' not in request.session:
+        return redirect('authorize')
+
+    credentials = goole.oauth2.credentials.Credentials(
+        **request.session['credentials']
+    )
+
+    feeds = googleapiclient.discovery.build(
+        API_SERVICE_NAME, API_VERSION, credentials=credentials
+    )
+
+    contacts = feeds
+
+    request.session['credentials'] = credentials_to_dict(credentials)
+    return HttpResponse(contacts)
+
+
+def authorize(request):
+    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
+        CLIENTS_SECRETS_FILE,
+        SCOPES
+    )
+
+    flow.redirect_uri = 'http://127.0.0.1:8000/contacts/'
+    authorization_url, state = flow.authorization_url(
+        access_type='offline',
+        login_hint='davidnganganjeri079@gmail.com',
+        include_granted_scopes='true'
+    )
+
+    request.session['state'] = state
+
+    print(authorization_url)
+    return redirect(authorization_url)
+
+
+def oauth2callback(request):
+    state = request.session['state']
+
+    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
+        CLIENTS_SECRETS_FILE, scopes=SCOPES, state=state
+    )
+
+    flow.redirect_uri = 'http://127.0.0.1:8000/contacts/'  # Callback url similar to
+    authorization_response = 'http://127.0.0.1:8000/oauth2callback/'  # Request url
+    flow.fetch_token(authorization_response=authorization_response)
+    credentials = flow.credentials
+    request.session['credentials'] = credentials_to_dict(credentials)
+
+    return redirect('contacts')
+
+
+def revoke(request):
+    pass
+
+
+def credentials_to_dict(credentials):
+    return {'token': credentials.token,
+            'refresh_token': credentials.refresh_token,
+            'token_uri': credentials.token_uri,
+            'client_id': credentials.client_id,
+            'client_secret': credentials.client_secret,
+            'scopes': credentials.scopes}
+
+
+def clear_credentials(request):
+    pass
+
+ # Contacts
+    path('googled764035286992e26.html', about, name='about', ),
+    path('contacts/', test_contacts_api, name='contacts'),
+    path('authorize/', authorize, name='authorize'),
+    path('oauth2callback/', oauth2callback, name='oauth2callback'),

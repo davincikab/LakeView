@@ -3,9 +3,9 @@
 <div class="container my-5 mx-5">
     <form method="post" class="form-horizontal border py-3 px-2">
         {% csrf_token %}
-        <p class="h5 ">Are you sure you want to delete Citizen "{{ object }}" and all its data?</p>
+        <p class="h5 ">Are you sure you want to delete Event "{{ object }}" and all its data?</p>
         <input type="submit" value="Confirm" class="btn btn-danger w-50">
-        <a href="{% url 'citizen-detail' object.pk %}" class="btn btn-success w-25"> Cancel</a>
+        <a href="{% url 'group-detail' object.group.pk %}" class="btn btn-success w-25"> Cancel</a>
     </form>
 </div>
 {% endblock %}

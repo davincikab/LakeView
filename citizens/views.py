@@ -1,10 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseRedirect, HttpResponse
+from django.urls import reverse_lazy, reverse, resolve
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.staticfiles.storage import staticfiles_storage
-from django.templatetags.static import static
+from django.contrib.staticfiles.finders import find
 
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -12,9 +12,9 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.conf import settings
 from django.utils import timezone
 from django.core.serializers import serialize
+from django.db.models import Count
 
-from .models import Citizen, Messages, Group
-from django.urls import reverse_lazy, reverse, resolve
+from .models import Citizen, Messages, Group, GroupEvents
 
 import os
 import csv
@@ -121,7 +121,8 @@ class GroupListView(LoginRequiredMixin, ListView):
         return super().get_queryset()
     
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs) 
+        context = super().get_context_data(**kwargs)
+        context['events'] = GroupEvents.objects.filter(time__gte = timezone.now()) 
         return context
 
 
@@ -132,6 +133,7 @@ class GroupDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['events'] = GroupEvents.objects.filter(group = self.kwargs['pk'])
         return context
     
     def get_queryset(self):
@@ -169,7 +171,25 @@ class GroupDeleteView(LoginRequiredMixin,DeleteView):
     template_name = "groups/group_delete.html"
     success_url = reverse_lazy("group-list")
 
+# Group Events CRUD
+class GroupEventsCreateView(LoginRequiredMixin, CreateView):
+    model = GroupEvents
+    fields = '__all__'
+    template_name = 'events/event_createupdate.html'
 
+# Update group Events
+class GroupEventsUpdateView(LoginRequiredMixin, UpdateView):
+    model = GroupEvents
+    fields = '__all__'
+    template_name = 'events/event_createupdate.html'
+
+# Delete Events 
+class GroupEventsDeleteView(LoginRequiredMixin, DeleteView):
+    model = GroupEvents
+    template_name = 'events/event_delete.html'
+    success_url = reverse_lazy('group-list')
+
+# Search a citizen using id number
 def searchCitizen(id=None):
     if id == '' or id == None:
         results = Citizen.objects.all()
@@ -177,12 +197,12 @@ def searchCitizen(id=None):
         results = Citizen.objects.filter(pk=id)
     return results
 
-
+# Map the citizens data from the models to a csv file
 @login_required(login_url='/user/login')
 def citizen_data_to_csv(request):
-    # Convert the contacts to a csv file. Filter the non synced contacts Save the csv. Redirect to google contacts import page
+    # Convert the contacts to a csv file. Filter the non synced contacts Save the csv. 
+    # Redirect to google contacts import page
     date = timezone.now()
-    from django.contrib.staticfiles.finders import find
     file_path = "contacts.csv"
     abs_path = find(file_path)
     
@@ -201,11 +221,11 @@ def citizen_data_to_csv(request):
             groups = ' ::: '.join([gp.name for gp in citizen.group_set.all()])
             #"Women ::: Farmer ::: * coworkers ::: * friends ::: * myContacts"
             csv_file.writerow(
-                {'Name':citizen.first_name,'Given Name':citizen.last_name,'Additional Name':'','Family Name':citizen.surname,'Yomi Name':'','Given Name Yomi':'',
-                'Additional Name Yomi':'', 'Family Name Yomi':'', 'Name Prefix':'', 'Name Suffix':'', 'Initials':'',
-                'Nickname':'', 'Short Name':'', 'Maiden Name':'', 'Birthday':citizen.dob, 'Gender':citizen.get_gender_display(), 'Location':citizen.location,'Billing Information':'',
-                'Directory Server':'', 'Mileage':'', 'Occupation':'', 'Hobby':'', 'Sensitivity':'', 'Language':'', 'Photo':'', 'Group Membership':groups,
-                'Phone 1 - Type':'Mobile', 'Phone 1 - Value':f"+254 {int(citizen.phone_number)}"
+                {'Name':citizen.first_name,'Given Name':citizen.last_name,'Additional Name':'','Family Name':citizen.surname,'Yomi Name':'',
+                'Given Name Yomi':'','Additional Name Yomi':'', 'Family Name Yomi':'', 'Name Prefix':'', 'Name Suffix':'', 'Initials':'',
+                'Nickname':'', 'Short Name':'', 'Maiden Name':'', 'Birthday':citizen.dob, 'Gender':citizen.get_gender_display(), 'Location':citizen.location,
+                'Billing Information':'','Directory Server':'', 'Mileage':'', 'Occupation':'', 'Hobby':'', 'Sensitivity':'', 'Language':'', 'Photo':'', 
+                'Group Membership':groups,'Phone 1 - Type':'Mobile', 'Phone 1 - Value':f"+254 {int(citizen.phone_number)}"
                 }
             )
             #Update the uploaded to google account 
@@ -220,14 +240,18 @@ def citizen_data_to_csv(request):
 def statistics(request):
     citizen_count = Citizen.objects.all().count()
     group_count = Group.objects.all().count()
-    return render(request,'statistics.html', {'citizen':citizen_count,'group':group_count})
+    messages = Messages.objects.values('is_sorted').annotate(isSorted = Count('is_sorted'))
+    issorted = [p.get('isSorted') for p in messages]
+
+    return render(request,'statistics.html', {'citizen':citizen_count,'group':group_count,'mymessages':issorted})
 
 
 @login_required(login_url='/user/login')
 def data_analysis(request):
     citizen = serialize('json', Citizen.objects.all())
     groups = serialize('json',Group.objects.all())
-    return HttpResponse(json.dumps({'citizen':citizen,'groups':groups}))
+    mymessages = serialize('json', Messages.objects.all())
+    return HttpResponse(json.dumps({'citizen':citizen,'groups':groups,'messages':mymessages}))
 
 
 @login_required(login_url='/user/login')
@@ -249,88 +273,7 @@ def add_to_group(request):
     else:
         return redirect('/manycitizen/')
 
-
-# Register user, add messages, add to group
-#  Use a modal to handle add to group and messages
 # Formsets
-
-            # Batch a processing
-            # send POT REQEUST TO https://www.google.com/m8/feeds/groups/{userEmail}/full/batch
-import google.oauth2.credentials
-import google_auth_oauthlib.flow
-import googleapiclient.discovery
-
-CLIENTS_SECRETS_FILE = staticfiles_storage.path("client_secret.json")
-SCOPES = ['https://www.google.com/m8/feeds/']
-
-API_SERVICE_NAME = 'contacts'
-API_VERSION = 'v3'
-
-def test_contacts_api(request):
-    # Client and scopes
-    if 'credentials' not in request.session:
-        return redirect('authorize')
-    
-    credentials = goole.oauth2.credentials.Credentials(
-        **request.session['credentials']
-    )
-
-    feeds = googleapiclient.discovery.build(
-        API_SERVICE_NAME,API_VERSION,credentials=credentials
-    )
-
-    contacts = feeds
-
-    request.session['credentials'] = credentials_to_dict(credentials)
-    return HttpResponse(contacts)
-
-def authorize(request):
-    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
-        CLIENTS_SECRETS_FILE,
-        SCOPES
-    )
-
-    flow.redirect_uri = 'http://127.0.0.1:8000/contacts/'
-    authorization_url, state = flow.authorization_url(
-        access_type = 'offline',
-        login_hint = 'davidnganganjeri079@gmail.com',
-        include_granted_scopes = 'true'
-    )
-
-    request.session['state'] = state
-
-    print(authorization_url)
-    return redirect(authorization_url)
-
-def oauth2callback(request):
-    state = request.session['state']
-
-    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
-        CLIENTS_SECRETS_FILE,scopes=SCOPES,state=state
-    )
-
-    flow.redirect_uri = 'http://127.0.0.1:8000/contacts/'  # Callback url similar to
-    authorization_response = 'http://127.0.0.1:8000/oauth2callback/'  # Request url
-    flow.fetch_token (authorization_response = authorization_response)
-    credentials = flow.credentials
-    request.session ['credentials'] = credentials_to_dict(credentials)
-
-    return redirect('contacts')
-
-def revoke(request):
-    pass
-
-def credentials_to_dict(credentials):
-    return {'token': credentials.token,
-            'refresh_token': credentials.refresh_token,
-            'token_uri': credentials.token_uri,
-            'client_id': credentials.client_id,
-            'client_secret': credentials.client_secret,
-            'scopes': credentials.scopes}
-
-def clear_credentials(request):
-    pass
-
 
 # TODO
 #  REMOVE DEGUG = TRUE

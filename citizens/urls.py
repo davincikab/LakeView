@@ -29,18 +29,17 @@ urlpatterns = [
     path('group/create/', GroupCreateView.as_view(), name="group-create"),
     path('group/update/<int:pk>/', GroupUpdateView.as_view(),name='group-update'),
 
+    # GroupEvents
+    path('group_events/create/', GroupEventsCreateView.as_view(), name="group-event-create"),
+    path('group_events/update/<int:pk>', GroupEventsUpdateView.as_view(), name="group-event-update"),
+    path('group_events/delete/<int:pk>', GroupEventsDeleteView.as_view(), name="group-event-delete"),
+
     # Others
     path('addtogroup/',add_to_group,name="add-group"),
     path('statistic/',statistics, name="stats"),
     path('data/', data_analysis, name="data"),
 
-    # Contacts
-    path('googled764035286992e26.html', about, name='about', ),
-    path('contacts/', test_contacts_api,name='contacts'),
-    path('authorize/', authorize, name= 'authorize'),
-    path('oauth2callback/', oauth2callback, name='oauth2callback'),
-
-    # 
+    # Export Contacts
     path('citizencontacts/', citizen_data_to_csv, name="downup")
 ]
 

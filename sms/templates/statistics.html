@@ -19,7 +19,23 @@
                                 </div>
                                 <div class="col-md-6 col-sm-12 border-left">
                                     <h5>Groups</h5>
-                                    <h2>{{group}}</h2>
+                                    <h2>{{ group }}</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <div class="row stats">
+                                <div class="col-md-6 col-sm-12">
+                                    <h5>Sorted Messages</h5>
+                                    <h2>{{mymessages|last}}</h2>
+                                </div>
+                                <div class="col-md-6 col-sm-12 border-left">
+                                    <h5>Pending Messages</h5>
+                                    <h2>{{ mymessages|first }}</h2>
                                 </div>
                             </div>
                         </div>

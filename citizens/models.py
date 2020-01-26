@@ -87,19 +87,24 @@ class Group(models.Model):
     def get_members(self):
         return self.members.all()
 
-# class GroupEvents(models.Model):
-#     group = models.ForeignKey("Group", on_delete=models.CASCADE)
-#     title = models.CharField(max_length=150)
-#     content = models.TextField(default="")
-#     venue = models.CharField("Event Venue", max_length=150)
-#     time = models.DateTimeField(auto_now=False, auto_now_add=False)
+class GroupEvents(models.Model):
+    group = models.ForeignKey("Group", on_delete=models.CASCADE)
+    title = models.CharField(max_length=150)
+    content = models.TextField(default="")
+    venue = models.CharField("Event Venue", max_length=150)
+    time = models.DateTimeField(auto_now=False, auto_now_add=False)
+    attendants_count = models.IntegerField('Number of Attendants',default=0)
 
-#     class Meta:
-#         verbose_name = 'Group Event'
-#         verbose_name_plural = "Group Events"
+    class Meta:
+        verbose_name = 'Group Event'
+        verbose_name_plural = "Group Events"
 
-#     def __str__(self):
-#         return self.title
+    def __str__(self):
+        return self.title
+    
+    def get_absolute_url(self):
+        return reverse("group-detail", kwargs={"pk": self.group.pk})
+    
     
     
         

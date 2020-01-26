@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="container mt-5">
+<div class="container mt-5 mx-auto">
     <div class="row">
-        <div class="col-md-2">
-            <a href="{% url 'group-update' group.pk %}" class="btn btn-info mb-2"> Update Group <i class="fa fa-pen"></i></a>
-            <a href="{% url 'group-delete' group.pk %}" class="btn btn-danger mb-2"> Delete Group <i class="fa fa-trash"></i></a>
+        <div class="col-md-3 col-sm-12 col-xs-12 ">
+            <a href="{% url 'group-update' group.pk %}" class="btn btn-info mb-2 w-100"> Update Group <i class="fa fa-pen"></i></a>
+            <a href="{% url 'group-delete' group.pk %}" class="btn btn-danger mb-2 w-100"> Delete Group <i class="fa fa-trash"></i></a>
+            <a href="{% url 'group-event-create' %}" class="btn btn-info mb-2 w-100"> Add Event <i class="fa fa-plus"></i></a>
         </div>
         <div class="col-md-6">
             <h1>{{ group.name }}</h1>
@@ -31,18 +32,23 @@
                 </tbody>
             </table>
             
-        
-            
-            
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <h5>Organised Events</h5>
             <ul class="list-group">
-                <li class="list-group-item"> This, that, them, them</li>
+                {% for event in events %}
+                    <li class="list-group-item"> {{ event.title}} <br>
+                        <div class="btn-group">
+                            <a href="{% url 'group-event-delete' event.pk %}" class="btn btn-danger btn-xs"> Delete</a>
+                            <a href="{% url 'group-event-update' event.pk %}" class="btn btn-warning btn-xs"> Update</a>
+                        </div>
+                    </li>
+                {% endfor %}
             </ul>
         </div>
     </div>
 </div>
-    
+
+<!-- A modal to delete a group -->
     
 {% endblock %}
