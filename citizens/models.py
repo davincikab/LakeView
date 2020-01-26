@@ -107,9 +107,6 @@ class GroupEvents(models.Model):
     
     
     
-        
-    
-
 # Create groups: Bursary, NHIF, NCA
 # ----------- COLLEGE, DRIVING -----------------
 # VOTING CENTRE
