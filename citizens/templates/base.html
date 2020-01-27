@@ -1,0 +1,97 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>
+        {% block title %}
+            Home
+        {% endblock %}
+    </title>
+
+
+    <link rel="stylesheet" href="{% static 'vendor/bootstrap/css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'vendor/fontawesome-free/css/all.css' %}">
+    <link rel="stylesheet" href="{% static 'master.css' %}">
+</head>
+<body>
+    {% if user.is_authenticated %}
+    <div class="navigation"> 
+        <div class="text-left ml-3">
+            <!-- Add a logo -->
+            <p href="{% url 'list-view'%}" class="navbar-brand">
+                <i class="fa fa-globe fa-2x"></i>
+                LakeView Ward
+                <!-- <br><small class="h6">Towards people driven development</small> -->
+            </p>
+        </div>
+        <div class="navbar navbar-expand-lg navbar-dark bg-dark navbar-fixed" id="navbar">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="nav navbar-nav " id="navbar">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'list-view'%}">People</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'group-list'%}">Groups</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'stats'%}"> Statistics</a>
+                    </li>
+                </ul>
+
+                <ul class="nav navbar-nav  justify-content-end ml-5">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'downup' %}"> <i class="fa fa-download"></i> New Contacts</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout'%}"> Logout</a>
+                    </li>
+                </ul> 
+            </div>
+        </div>
+    </div> 
+    {% endif %}
+  
+    <!-- Add extract view here -->
+    <div class="body">
+        {% block content %}
+        
+        {% endblock %}
+    </div>
+    {% if user.is_authenticated %}
+    <footer class="bg-dark text-center text-info">
+        <div class="">
+            <p>All Rights Reserved <br> &copy 2020 <br> LakeView Ward</p>
+        </div>
+    </footer>
+    {% endif %}
+
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+
+    <script>
+        //  Change the css behaviour
+        //  Animate: Navbar brand and nabar-nav
+        $(function(){
+            $.ajax({
+                url:'/static/contacts.csv',
+                type:'GET',
+                dataType:'binary',
+                success:function(url){
+
+                }
+            });
+        });
+    </script>
+    {% block javascript %}
+
+    {% endblock %}
+</body>
+</html>

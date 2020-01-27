@@ -2,13 +2,6 @@ from .views import *
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from rest_framework.routers import DefaultRouter 
-from .apiviews import *
-
-router = DefaultRouter()
-router.register('citizens', CitizenViewSet, 'citizens')
-router.register('messages', MessageViewSet, 'message')
-router.register('groups', GroupViewSet, 'group')
 
 urlpatterns = [
     path('', home, name='citizen-home'),
@@ -43,7 +36,6 @@ urlpatterns = [
     path('citizencontacts/', citizen_data_to_csv, name="downup")
 ]
 
-# urlpatterns+=router.urls
 # admin.site
 
 urlpatterns+= static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)

@@ -36,25 +36,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
-    'sms',
     'user',
     'citizens',
-    'rest_framework',
     'crispy_forms',
 ]
 
-REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
-        # 'rest_framework.authentication.TokenAuthentication',
-        # 'rest_framework.authentication.SessionAuthentication',
-    ],
-    # 'DEFAULT_PERMISSION_CLASSES': (
-    #     'rest_framework.permissions.IsAuthenticated',
-    # ),
-
-    'DATETIME_FORMAT': "%m/%d/%Y %H:%M:%S",
-}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -64,7 +50,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'citizens.openaccess.open_access_middleware',
 ]
 
 ROOT_URLCONF = 'LakeView.urls'
@@ -81,7 +66,7 @@ CRISPY_CLASS_CONVERTERS = {
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR,'sms/templates')],
+        'DIRS': [os.path.join(BASE_DIR,'citizens/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -148,7 +133,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, './media/')
 MEDIA_URL = '/media/'
 
 
-STATIC_ROOT = os.path.join(BASE_DIR,'sms/static')
+STATIC_ROOT = os.path.join(BASE_DIR,'./staticfiles/')
 STATIC_URL = '/static/'
 
 LOGIN_URL = '/user/login/'

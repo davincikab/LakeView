@@ -5,6 +5,7 @@ from django.urls import reverse_lazy, reverse, resolve
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.staticfiles.finders import find
+from django.contrib.staticfiles.storage import staticfiles_storage
 
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -202,25 +203,23 @@ def searchCitizen(id=None):
 def citizen_data_to_csv(request):
     # Convert the contacts to a csv file. Filter the non synced contacts Save the csv. 
     # Redirect to google contacts import page
-    date = timezone.now()
-    file_path = "contacts.csv"
-    abs_path = find(file_path)
-    
-    with open(abs_path, mode='w') as file:
-        fields = ['Name','Given Name','Additional Name','Family Name','Yomi Name','Given Name Yomi',
-                'Additional Name Yomi','Family Name Yomi','Name Prefix','Name Suffix','Initials',
-                'Nickname','Short Name','Maiden Name','Birthday','Gender','Location','Billing Information',
-                'Directory Server','Mileage','Occupation','Hobby','Sensitivity','Language','Photo','Group Membership',
-                'Phone 1 - Type','Phone 1 - Value'
+    response = HttpResponse(content_type = 'text/csv')
+    fields = ['Name','Given Name','Additional Name','Family Name','Yomi Name','Given Name Yomi',
+            'Additional Name Yomi','Family Name Yomi','Name Prefix','Name Suffix','Initials',
+             'Nickname','Short Name','Maiden Name','Birthday','Gender','Location','Billing Information',
+            'Directory Server','Mileage','Occupation','Hobby','Sensitivity','Language','Photo','Group Membership',
+            'Phone 1 - Type','Phone 1 - Value'
         ]
-
-        csv_file= csv.DictWriter(file, fieldnames=fields)
-        csv_file.writeheader()
-        for citizen in Citizen.objects.filter(uploaded_to_google=False):
-            # Get the groups and padd with double colon
-            groups = ' ::: '.join([gp.name for gp in citizen.group_set.all()])
-            #"Women ::: Farmer ::: * coworkers ::: * friends ::: * myContacts"
-            csv_file.writerow(
+        
+    response['Content-Disposition'] = f'attachment; filename=Contacts_{timezone.now()}.csv'
+    
+    csv_file= csv.DictWriter(response, fieldnames=fields)
+    csv_file.writeheader()
+    for citizen in Citizen.objects.filter(uploaded_to_google=False):
+        # Get the groups and padd with double colon
+        groups = ' ::: '.join([gp.name for gp in citizen.group_set.all()])
+        #"Women ::: Farmer ::: * coworkers ::: * friends ::: * myContacts"
+        csv_file.writerow(
                 {'Name':citizen.first_name,'Given Name':citizen.last_name,'Additional Name':'','Family Name':citizen.surname,'Yomi Name':'',
                 'Given Name Yomi':'','Additional Name Yomi':'', 'Family Name Yomi':'', 'Name Prefix':'', 'Name Suffix':'', 'Initials':'',
                 'Nickname':'', 'Short Name':'', 'Maiden Name':'', 'Birthday':citizen.dob, 'Gender':citizen.get_gender_display(), 'Location':citizen.location,
@@ -228,12 +227,12 @@ def citizen_data_to_csv(request):
                 'Group Membership':groups,'Phone 1 - Type':'Mobile', 'Phone 1 - Value':f"+254 {int(citizen.phone_number)}"
                 }
             )
-            #Update the uploaded to google account 
-            citizen.uploaded_to_google = True
-            citizen.save()
-        file.close()
 
-    return HttpResponse("Successfully converted data to csv")
+        #Update the uploaded to google account 
+        citizen.uploaded_to_google = True
+        citizen.save()
+
+    return response
 
 
 @login_required(login_url='/user/login')
