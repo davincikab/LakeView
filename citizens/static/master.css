@@ -2,13 +2,17 @@ html, body{
     margin:0%;
     padding:0%;
     font-style: normal;
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    font-size: 0.96em;
+    font-family:'Times New Roman', Times, serif;
+    font-size: medium;
 }
 
 #navbar{
     color:white;
-    font-size: 1.2em;
+    font-size: 1.0em;
+}
+
+.body{
+    margin-top: 10rem;
 }
 
 .navbar-fixed{
@@ -22,11 +26,9 @@ html, body{
 
 .home{
     height:80vh;
-    /* background-color: cyan; */
 }
 
 .home-page{
-    /*  background-color: cyan; */
     padding-top:10rem;
 }
 
@@ -73,7 +75,7 @@ footer{
     
 }
 
-.map .card-body{
+.map > .card-body{
     padding:0px !important;
 }
 
@@ -84,12 +86,10 @@ footer{
 .card, .card-body{
     width:100%;
     height: auto;
-    padding: 0%;
-   
 }
 
 .card-footer{
-    padding:0%;
+    /* padding:0%; */
 }
 
 .stats h2{

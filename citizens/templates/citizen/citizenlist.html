@@ -25,8 +25,8 @@
                 {% for citizen in citizens %}
                 <tr>
                     <td><h5><a href="{% url 'citizen-detail' citizen.id_number%}">{{ citizen.id_number }}</a></h5></td>
-                    <td><p>{{ citizen.first_name }} {{ citizen.last_name }} </p></td>
-                    <td>{{ citizen.get_gender_display }}</td>
+                    <td><p>{{ citizen.person.first_name }} {{ citizen.person.last_name }} </p></td>
+                    <td>{{ citizen.person.get_gender_display }}</td>
                 </tr>                
                 {% endfor %}
             </table>

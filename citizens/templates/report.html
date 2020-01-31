@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% block title %}
+ Report
+{% endblock %}
+
+{% load static %}
+{% block content %}
+<style>
+    .list-group-item:hover{
+        background-color: antiquewhite;
+    }
+
+</style>
+    <div class="container my-4">
+        <h4 class="my-2">Weekly Reports</h4>
+        <div class="row">
+            <div class="col-md-3">
+               
+                <ul class="list-group">
+                    <form action="" method="GET">
+                        <div class="form-group">
+                            <label for="start_date">Week Start</label>
+                            <input type="text" name="start_date" id="start_date" class="form-control" value="{{ start_date|date:"Y-m-d"}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="end_date">Week End</label>
+                            <input type="text" name="end_date" id="end_date" class="form-control" value="{{end_date|date:"Y-m-d"}}">
+                        </div>
+                        <input type="submit" value="Get Report" class="btn btn-dark w-100">
+                    </form>
+                </ul>
+            </div>
+            <div class="col-md-8">
+                <table class="table">
+                    <tr>
+                        <th>Person</th>
+                        <th>Date</th>
+                        <th>Reason</th>
+                        <th>Content</th>
+                    </tr>
+                    <tbody>
+                        {% for entry in weekreport %}
+                        <tr>
+                            <td>{{ entry.user.person.get_person }}</td>
+                            <td>{{ entry.date_created}}</td>
+                            <td>{{ entry.type_of_isssue }}</td>
+                            <td>{{ entry.content}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascript %}
+<link rel="stylesheet" href="{% static 'jquery-ui.css'%}" />
+<script src="{% static 'jquery-ui.min.js'%}"></script>
+
+    <script>
+        $(function(){
+
+            $('#start_date').datepicker({ dateFormat: "yy-mm-dd",});
+            $('#end_date').datepicker({ dateFormat: "yy-mm-dd",});
+
+            $('#report-filter').on('submit', function(e){
+                e.preventDefault();
+
+            });
+
+            function loadData(week){
+                console.log(week);
+                // Call ajax to load the reports
+                $.ajax({
+                    url:'',
+                    data:{'week':week},
+                    type:'GET',
+                    dataType:'json',
+                    success:function(response){
+                        // 
+                    },
+                    error:function(){
+                        alert("Failed to load Data");
+                    }
+                });
+
+            }
+        
+        });
+
+    </script>
+{% endblock %}

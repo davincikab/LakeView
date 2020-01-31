@@ -3,12 +3,12 @@ html, body{
     padding:0%;
     font-style: normal;
     font-family: Georgia, 'Times New Roman', Times, serif;
-    font-size: 0.96em;
+    /* font-size: 0.96em; */
 }
 
 #navbar{
     color:white;
-    font-size: 1.2em;
+    font-size: 1.0em;
 }
 
 .navbar-fixed{
@@ -84,7 +84,7 @@ footer{
 .card, .card-body{
     width:100%;
     height: auto;
-    padding: 0%;
+    padding: 4%;
    
 }
 

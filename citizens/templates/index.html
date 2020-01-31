@@ -8,12 +8,14 @@
     body{
             background-image: url('{% static "images/juliewolpers.jpg" %}');
             background-repeat: no-repeat;
+            /* background-repeat: repeat-y; */
             font-style: normal;
             font-family: Georgia, 'Times New Roman', Times, serif;
             font-size: small;
         }
         .navigation{
-            background-color:#10E7DC70;
+            /* background-color:#3f3e3e; */
+            /* #10E7DC70; */
             color: aliceblue;
         }
 
@@ -23,43 +25,56 @@
 
         .container-fluid{
             width:100%;
-            height:695px;
-            background-color:#10E7DC70;
-            padding: 0;
+            height:auto;
+            /* */
             margin: 0;
+        }
+        .home{
+            /* background-color:#10E7DC10;  */
+            margin-top: 5rem;
         }
         .btn{
             border-radius: 28px;
             width: 20%;
         }
 
-        .btn-warning{
-             background-color:#F79E02;
-             border-color: #F79E0290;
-             color:#F79E0290;
-             color: white;
-        }
-
-        .btn-success{
-            color: #F79E02;
-            background-color: #f0f8ff90;
-            border-color: #f0f8ff;
-        }
         h2{
-            color: aliceblue;
+            /* color: aliceblue; */
             font-weight: bold;
             font-size: 2.6em;
+        }
+
+        .card{
+            color: #bbb9b9;
+        }
+
+        .boxed-grey {
+            background: #f9f9f9;
+            padding: 20px;
+            
+        }
+
+        .img-circle{
+            border-radius: 50%;
+            width: 200px;
+            height: 200px;
+        }
+
+        .card img{
+            width: 300px;
+            height: 300px;
+            
         }
 </style>
     <div class="container-fluid">
         <div class="home">
             <div class="container home-page text-center">
-                <div class="justify-content-center">
+                <div class="text-dark">
                     <h2 class="">Lakeview Ward, Nakuru County</h2>
-                    <p class="text-white">Towards people driven development</p>
+                    <p class="h5">Towards people driven development</p>
                     <!-- <div class="button-group"> -->
-                    <a href="{% url 'list-view' %}" class="btn btn-warning pl-2 mr-2">People</a>
-                    <a href="{% url 'group-list' %}" class="btn btn-success pl-3">Groups</a>
+                    <a href="{% url 'list-view' %}" class="btn btn-dark pl-2 mr-2 w-25">People</a>
+                    <a href="{% url 'group-list' %}" class="btn btn-light pl-3 w-25">Groups</a>
                     <!-- </div> -->
                     <p class="text-white mt-2">
                        
@@ -67,13 +82,115 @@
                 </div>
             </div>
         </div>
+
+        <div class="container-fluid py-2 px-2 my-5 event bg-white">
+            <!-- Events  -->
+            <h2 class="text-center">Upcoming Events</h2>
+            <p class="text-center"><i class="fa fa-2x fa-angle-down"></i></p>
+            <div class="card-deck">
+                {% for event in events %}
+                    <div class="col-md-4 boxed-grey mb-2">
+                        <div class="card-header">
+                            {{event.title}}
+                            <small>{{ event.time }}</small>
+                        </div>
+                        <div class="card-body py-2 px-2">
+                            <p> Venue: <strong>{{ event.venue }}</strong></p>
+                            {{event.content}}
+                        
+                        </div>
+                        
+                        
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="container py-3 px-2">
+            <h2 class="text-center">TESTIMONIALS</h2>
+            <p class="text-center"><i class="fa fa-2x fa-angle-down"></i></p>
+            <!-- Carousel -->
+            <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                </ol>
+                <div class="carousel-inner">
+                    <!-- Indicators -->
+                    {% for testimonial in testimonials %}
+                        <div class="carousel-item">
+                            <div class="jumbotron bg-white">
+                                <h1 class="display-4">{{ testimonial.name }}</h1>
+                                <p class="lead">
+                                    {{ testimonial.content }}
+                                </p>
+                                <hr class="my-4">
+                                <p>{{ testimonial.title }}</p>
+                            </div>
+
+                        </div>
+                    {% endfor %}
+        
+                    </div>
+                </div>
+
+                <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+
+        </div>
+
+        <div class="container py-3 px-2">
+            <h2 class="text-center ">THE TEAM</h2>
+            <p class="text-center"><i class="fa fa-2x fa-angle-down"></i></p>
+            <div class="row">
+                {% for member in teams %}
+                    <div class="col-xs-6 col-sm-3 col-md-3 text-center mb-5">
+                        <div class="wow bounceInUp" data-wow-delay="0.2s">
+                            <div class="team boxed-grey">
+                                <div class="inner">
+                                    <h5>{{ member.citizen.person.get_person }}</h5>
+                                    <p class="subtitle">{{ member.role }}</p>
+                                    <div class="avatar"><img src="{% static 'images/juliewolpers.jpg' %}" alt="" class="img-responsive img-circle" /></div>
+                                    <p class="mt-2">{{ member.area_allocated }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="container-fluid py-3 px-2">
+            <h2 class="text-center ">CONTACT US</h2>
+            <p class="text-center"><i class="fa fa-2x fa-angle-down"></i></p>
+            <div class="row mx-5 my-2">
+                <div class="col-md-4">
+                    <h5>Phone Number</h5>
+                    <p>+254 704893840</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Email Address</h5>
+                    <p>+254 704893840</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Physical Address</h5>
+                    <p>Adams Building along Naivasha - Nairobi Highway</p>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}
 {% block javascript %}
     <script>
-        var element = document.getElementById('navbar');
-        element.classList.remove('navbar-dark','bg-dark');
-        element.classList.add('text-white');
-
-         </script>
+        // Get the
+        $('.carousel-item').first().addClass('active');
+        </script>
 {% endblock %}

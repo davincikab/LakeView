@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block title %}
+    Sponsored Students
+{% endblock %}
+{% load static %}
+{% block content %}
+<div class="container">
+    <div class="container mb-3 mt-3">
+        <div class="row ">
+            <form class="form-horizontal col-md-8" method="get">
+                <input class="form-control" type="text" name="q" id="" placeholder="Student Name or Admission Number">
+            </form>
+            <div class="col-md-4 col-sm-12">
+                <a href="{% url 'create-student' %}" class="btn btn-info mb-2 w-100"> Create student<i
+                        class="fa fa-plus ml-2"></i></a>
+    
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <table class="table">
+                    <tr>
+                        <th>Names</th>
+                        <th>Gender</th>
+                        <th>School</th>
+                        <th>Admission Number</th>
+                        <th>Form</th>
+                    </tr>
+                    {% for student in students %}
+                    <tr>
+                        <td class="item">
+                            <h5><a href="{% url 'student-detail' student.pk %}">{{ student.person.get_person }}</a>
+                            </h5>
+                        </td>
+                        <td>{{ student.person.get_gender_display }}</td>
+                        <td>{{ student.school }}</td>
+                        <td>{{ student.admission_number }}</td>
+                        <td>{{ student.form }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+    
+                <div class="container ml-5">
+                    {% include 'paginate.html' %}
+                </div>
+    
+            </div>
+            <div class="col-md-4">
+                <!-- Messages Recent Issues -->
+                <div class="list-group">
+                    <h5> Recent Messages</h5>
+                    <ul class="list-group">
+                        {% for message in mymessages %}
+                        <li class="list-group-item"> {{message.content}} <small><a
+                                    href="{% url 'student-detail' message.user.id_number %}">{{message.pk}}</a></small></li>
+                        {% endfor %}
+                    </ul>
+                    <div class="detail">
+    
+                    </div>
+    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -10,16 +10,12 @@
             <a href="{% url 'citizen-update' citizen.pk %}" class="btn btn-dark link mb-2"> Update citizen <i class="fa fa-pen ml-2"></i></a>
             <a href="{% url 'citizen-delete' citizen.pk %} " class="btn btn-dark text-danger link mb-2"> Delete citizen <i class="fa fa-trash ml-2"></i></a>
             <a href="/citizen/{{citizen.pk}}/message/create/" class="btn btn-dark link mb-2"> Add a Message <i class="fa fa-envelope ml-2"></i></a>
-            <button class="btn btn-dark link" data-toggle="modal" data-target="#modalData" > Add to Group<i class="fa fa-user ml-2"></i></button>
+            <!-- <button class="btn btn-dark link" data-toggle="modal" data-target="#modalData" > Add to Group<i class="fa fa-user ml-2"></i></button> -->
 
-            <h4 class="mt-5">Membership</h4>
-            {% for member in members %}
-               <i class="text-info" >{{member.name}},</i>
-            {% endfor %}
         </div>
         <div class="col-lg-5 col-md-5 col-sm-12 mt-2">
             
-            <h3>{{ citizen.surname }} {{ citizen.first_name }} {{ citizen.last_name}}</h3>
+            <h3>{{ citizen.person.surname }} {{ citizen.person.first_name }} {{ citizen.person.last_name}}</h3>
             <p></p>
             <table class="table">
                 <tbody>
@@ -33,19 +29,15 @@
                     </tr>
                     <tr>
                         <td>Gender</td>
-                        <td>{{ citizen.get_gender_display }}</td>
+                        <td>{{ citizen.person.get_gender_display }}</td>
                     </tr>
                     <tr>
                         <td>Date of Birth</td>
-                        <td>{{ citizen.dob }}</td>
+                        <td>{{ citizen.person.dob }}</td>
                     </tr>
                     <tr>
                         <td>Location</td>
                         <td>{{ citizen.location }}</td>
-                    </tr>
-                    <tr>
-                        <td>Date of Birth</td>
-                        <td>{{ citizen.dob }}</td>
                     </tr>
                     <tr>
                         <td>Phone Number</td>
@@ -58,6 +50,7 @@
                 </tbody>
             </table>
 
+            
         </div>
         <div class="col-lg-4 col-md-4 col-sm-12 mt-2">
             <h6>User Issues</h6>
@@ -65,14 +58,14 @@
                 {% if message.is_sorted %}
                 <button class="btn btn-dark mb-2 accordion" type="button" data-toggle="collapse" data-target="#collapse{{message.pk}}"
                     aria-expanded="false" aria-controls="collapseExample">
-                {{ message.date_created|naturalday }}
+                    {{ message.date_created|naturalday }}
                 </button>
                 {% else %}
                 <button class="btn btn-danger mb-2 accordion" type="button" data-toggle="collapse" data-target="#collapse{{message.pk}}"
                     aria-expanded="false" aria-controls="collapseExample">
                     {{ message.date_created|naturalday }}
                 </button>
-                {% endif %}
+            {% endif %}
                 <div class="collapse" id="collapse{{message.pk}}">
                     <p>
                         <small>{{ message.type_of_issue }}</small>
@@ -86,6 +79,78 @@
             {% endfor %}
         </div>
     </div>
+</div>
+
+<!-- Services The Citizen Benefitd from -->
+<div class="container">
+<div class="row mt-3 w-100">
+    <h4 class="text-center"> Services Recieved</h4>
+
+    <div class="row mb-2 w-100">        
+        <div class="col-md-6">
+            {% if nca.citizen %}
+                <p class="h5">National Construction Authority</p>
+                <p>Processing Status {{ nca.processing_status }}</p>
+                <div class="btn-group">
+                    <a href="" class="btn btn-outline-dark btn-sm"> Update </a>
+                    <!-- <a href="" class="btn btn-outline-dark btn-sm">Delete</a> -->
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="col-md-6">
+            {% if nhif.pk %}
+                <h5>National Health Insurance Fund<br></h5>
+                <p>Processing Status <strong>{{ nhif.ispending }} True</strong></p>
+                <div class="btn-group">
+                    <a href="{% url 'nhif-update' nhif.pk %}" class="btn btn-outline-dark btn-sm"> Update </a>
+                    <!-- <a href="" class="btn btn-outline-dark btn-sm">Delete</a> -->
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row mt-5 mb-2 w-100">
+        <div class="col-md-6">
+            <h5>Bursary Awarded</h5>
+            <table class="table">
+                <tr>
+                    <th>Student Name</th>
+                    <th>School</th>
+                    <th>Amount</th>
+                    <th>Date Awarded</th>
+                </tr>
+
+                {% for bursary in bursaries %}
+                <tr>
+                    <td>{{ bursary.student.person.get_person }}</td>
+                    <td>{{ bursary.student.school }}</td>
+                    <td>{{ bursary.amount_awarded }}</td>
+                    <td>{{ bursary.date_issued }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            <a href="{% url 'bursary-create' %}" class="btn btn-outline-default"> Add</a>
+        </div>
+        <div class="col-md-6">
+            <h5>Curriculum Vitae</h5>
+            {% if cv.pk %}
+            <div class="">
+                {{ cv.qualifications }}
+                {{ cv.pk }}
+                <div class="btn-group">
+                    <a href="{% url 'cv-update' cv.pk %}" class="btn btn-outline-dark btn-sm"> Update </a>
+                    <a href="#" class="btn btn-outline-dark btn-sm">Delete</a>
+                </div>
+                
+            </div>
+            {% else %}
+                <a href="{% url 'cv-create' %}" class="btn btn-outline-dark btn-sm"> Add </a>
+            {% endif %}
+            
+        </div>
+    </div>
+</div>
 </div>
 
 <!-- Add to groups Modal  -->
@@ -112,10 +177,6 @@
                 <input type="submit" value="Add to Group(s)" class="btn btn-success">
             </form>
         </div>
-        <!-- <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
-        </div> -->
     </div>
     </div>
 </div>

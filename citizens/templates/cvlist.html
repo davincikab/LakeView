@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}
+    Curiculum Viate
+{% endblock %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+<div class="container text-dark">
+    <div class="row my-5 mx-2">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="row mb-2">
+                <a href="{% url 'cv-create' %}" class="btn btn-info">Add New CV Entry
+                    <i class="fa fa-plus ml-3"></i></a>
+            </div>
+            <div class="row">
+                <table class="table table-responsive">
+                    <tr>
+                        <th>Name   </th>
+                        <th>Qualifications</th>
+                    </tr>
+                    {% for cv in cvs %}
+                        <tr>
+                            <td>{{ cv.citizen.person.get_person }}</td>
+                            <td>{{ cv.qualifications }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+{% block javascript %}
+
+{% endblock %}

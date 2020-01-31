@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block title %}
+Login
+{% endblock %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+<style>
+    body {
+        background-image: url('{% static "images/juliewolpers.jpg" %}');
+        background-repeat: no-repeat;
+        font-style: normal;
+        font-family: Georgia, 'Times New Roman', Times, serif;
+        font-size: small;
+    }
+
+    .container-fluid {
+        width: 100%;
+        height: auto;
+        background-color: #10E7DC70;
+        padding: 0;
+        margin: 0;
+    }
+    .box-shadow { box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05); }
+    strong{
+        margin: 10%;
+    }
+</style>
+<div class="container-fluid text-dark">
+    <div class="row container my-5">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="row mx-1 mb-2">
+                <a href="{% url 'project-create' %}" class="btn btn-info">Add Project <i class="fa fa-plus"></i></a>
+            </div>
+            <div class="row">
+                {% for project in projects %}
+                    <div class="col-md-4 col-sm-6">
+                        <div class="card mb-4 box-shadow">
+                            <img class="card-img-top" src="{% static 'images/juliewolpers.jpg' %}" alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="">{{ project.name }}</h5>
+                                <p class="card-text">
+                                    {{ project.project_description }}
+                                </p>
+                                <p>
+                                    Contractor <strong>{{ project.contractor }}</strong>
+                                </p>
+                                <p>
+                                    Project Cost <strong>{{ project.project_budget}}</strong>
+                                </p>
+                                <p>
+                                    Initiation Date <strong>{{ project.initiation_date }}</strong>
+                                </p>
+                                <p>
+                                    Completion Date <strong>{{ project.completion_date }}</strong>
+                                </p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <a href="{% url 'project-update' project.pk %}" type="button" class="btn btn-sm btn-outline-secondary">Update</a>
+                                        <!-- <a type="button" class="btn btn-sm btn-outline-secondary">Edit</a> -->
+                                    </div>
+                                    <small class="text-muted">{{ project.project_budget}} mins</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="col-md-4">
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+{% block javascript %}
+
+{% endblock %}

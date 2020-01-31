@@ -23,7 +23,7 @@
         }
 
         .login{
-            background-color: #ffffff10;
+            background-color: #ffffff60;
             padding: 2%;
         }
 
@@ -41,19 +41,19 @@
             margin-left: 0rem;
         }
     </style>
-    <div class="container-fluid text-white">
+    <div class="container-fluid text-dark">
         <div class="row container">
             <div class="col-md-4"></div>
             <div class="col-md-6 col-sm-8 col-xs-8">
                 <div class="text-header text-center">
-                    <p class="h2 mt-5">LakeView Ward Visitors Management Site</p>
+                    <p class="h2 mt-5 bold">LakeView Ward Visitors Management Site</p>
                 </div>
-                <div class="login">
+                <div class="login w-100">
                     <p class="text-center h4">Login</p>
                     <form action="{% url 'login' %}" method="POST" class="form-horizontal">
                         {% csrf_token %}
                         {{form|crispy}}
-                        <input type="submit" name="Login" class="form-control mt-2 btn-info" value="Login">
+                        <input type="submit" name="Login" class="form-control mt-2 btn-dark" value="Login">
                     </form>
                 </div>
             </div>

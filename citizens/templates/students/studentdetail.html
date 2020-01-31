@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block title %}
+Group Detail
+{% endblock %}
+{% block content %}
+<div class="container my-5 mx-auto">
+  <div class="row">
+     
+      <div class="col-md-4">
+            <h5>Personal Information </h5>
+            <table class="table">
+                <tr>
+                    <td>Name</td>
+                    <td>{{ student.person.get_person }}</td>
+                </tr>
+                <tr>
+                    <td>Admission Number</td>
+                    <td>{{ student.admission_number }}</td>
+                </tr>
+                <tr>
+                    <td>Gender</td>
+                    <td>{{ student.person.get_gender_display }}</td>
+                </tr>
+                <tr>
+                    <td>School</td>
+                    <td>{{ student.school }}</td>
+                </tr>
+                <tr>
+                    <td>Current Level</td>
+                    <td>Form {{ student.form }}</td>
+                </tr>
+            </table>
+      </div>
+      <div class="col-md-8">
+          <h5>Academic Information</h5>
+            <table class="table table-bordered">
+                <thead>
+                    <th>Grade</th>
+                    <th>Term</th>
+                    <th>Level</th>
+                    <th>Year</th>
+                    <th>Remarks</th>
+                </thead>
+                {% for result in results %}
+                    <tr>
+                        <td>{{ result.grade }}</td>
+                        <td>{{ result.term }}</td>
+                        <td>Form {{ result.form }}</td>
+                        <td>{{ result.year }}</td>
+                        <td>{{ result.remarks }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+            
+      </div>
+  </div>
+</div>
+
+<!-- A modal to delete a group -->
+
+{% endblock %}

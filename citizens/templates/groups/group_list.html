@@ -3,24 +3,83 @@
     Groups
 {% endblock %}
 {% block content %}
-<div class="container my-5 mx-auto">
+<style>
+    .card{
+        /* background-color: rgb(54, 54, 54); */
+        border-radius: 12px;
+    }
+    .card-body a{
+        color: rgb(236, 235, 235);
+    }
+
+    a:hover{
+        color: aqua;
+    }
+    footer{
+        margin-top: 5%;
+    }
+</style>
+<div class="container mx-auto my-5">
     <!-- <a href="{% url 'group-create'%}" class="btn btn-info my-2"> Create Group <i class="fa fa-plus"></i></a> -->
     <div class="row">
         <div class="col-md-9">
-            <a href="{% url 'group-create'%}" class="btn btn-info mb-2"> Create Group <i class="fa fa-plus"></i></a>
+            <!-- <a href="{% url 'group-create'%}" class="btn btn-info mb-2"> Create Group <i class="fa fa-plus"></i></a> -->
             <div class="row">
 
-                {% for group in groups %}
-                <div class="card col-md-5 mx-3 mb-3">
+                <div class="card col-md-5 mx-3 my-3 bg-dark ">
                     <div class="card-body">
-                        <h4><a href="/group/{{group.pk}}/">{{ group.name }}</a></h4>
-                    </div>
-                    <div class="card-footer">
-                        <p>{{ group.get_members|length }} members</p>
+                        <h4><a href="#" class="nav-link">Sponsored Students</a></h4>
                     </div>
                 </div>
-                {% endfor %}
 
+                <div class="card col-md-5 mx-3 mb-3">
+                    <div class="card-body">
+                        <h4><a href="{% url 'nhif-list' %}" class="nav-link">National Health Insurance Fund</a></h4>
+                    </div>
+                </div>
+
+                <div class="card col-md-5 mx-3 mb-3">
+                    <div class="card-body px-2">
+                        <h4><a href="{% url 'nca-list' %}" class="nav-link">National Construction Authority </a></h4>
+                        <p></p>
+                    </div>
+                </div>
+
+                <div class="card col-md-5 mx-3 mb-3">
+                    <div class="card-body px-2">
+                        <h4><a href="{% url 'selfgroup' %}" class="nav-link">Self Help Group</a></h4>
+                        <p></p>
+                    </div>
+                </div>
+
+                <div class="card col-md-5 mx-3 mb-3">
+                    <div class="card-body ">
+                        <h4><a href="{% url 'list-student' %}" class="nav-link">Students</a></h4>
+                        <p></p>
+                    </div>
+                </div>
+
+                <div class="card col-md-5 mx-3 mb-3">
+                    <div class="card-body">
+                        <h4><a href="{% url 'college-list' %}" class="nav-link">College</a></h4>
+                        <p></p>
+                    </div>
+                </div>
+
+                <div class="card col-md-5 mx-3 mb-3">
+                    <div class="card-body px-2">
+                        <h4><a href="{% url 'team-list' %}" class="nav-link">Team Members</a></h4>
+                        <p></p>
+                    </div>
+                    
+                </div>
+
+                <div class="card col-md-5 mx-3 mb-3">
+                    <div class="card-body px-2">
+                        <h4><a href="{% url 'cv-list' %}" class="nav-link">Curiculum Vitae</a></h4>
+                        <p></p>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="col-md-3">
@@ -34,4 +93,15 @@
     </div>
 </div>
 
+{% endblock %}
+{% block javascript %}
+    <script>
+        $(function(){
+            var elements = document.querySelectorAll('.card');
+
+            elements.forEach(element=>{
+                element.classList.add('bg-dark');
+            })
+        });
+    </script>
 {% endblock %}

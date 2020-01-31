@@ -30,7 +30,7 @@ class UserCreationForm(forms.ModelForm):
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.set_password(self.clean_data['password1'])
+        user.set_password(self.cleaned_data['password1'])
         if commit:
             user.save()
         return user
@@ -60,6 +60,13 @@ class UserAdmin(BaseUserAdmin):
         (None, {"fields": ('id_number', 'password',)}),
         ('Personal Information', {"fields": ('surname', 'first_name','last_name','phone_number', 'dob', 'gender','email')}),
         ('Permissions', {"fields": ('is_admin',)}),
+    )
+
+    add_fieldsets = (
+        (None, {
+        'classes': ('wide',),
+        'fields': ('id_number', 'password1', 'password2')}
+        ),
     )
 
     search_fields = ('id_number',)

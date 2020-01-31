@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}
+Self Help Group
+{% endblock %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+<div class="container text-dark">
+    <div class="row mx-2 my-5">
+        <div class="col-md-8 col-sm-12 col-xs-12">
+            <div class="row mb-2">
+                <a href="{% url 'nhif-create' %}" class="btn btn-info">Add New NHIF Entry 
+                    <i class="fa fa-plus ml-3" ></i></a>
+            </div>
+            <div class="row">
+                
+                <table class="table table-stripped">
+                    <tr>
+                        <th>Name</th>
+                        <th>ID number</th>
+                        <th>Processed</th>
+                    </tr>
+                    {% for nhif in nhifs %}
+                    <tr>
+                        <td>{{ nhif.citizen.person.get_person }}</td>
+                        <td>{{ nhif.citizen.id_number }}</td>
+                        <td>{{ nhif.ispending }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+{% block javascript %}
+
+{% endblock %}

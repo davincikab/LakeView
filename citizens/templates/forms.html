@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="container mb-3">
+            <h5 class="text-center">Create Student</h5>
+        <form action="" method="POST">
+            {% csrf_token %}
+            {{ person_formset|crispy }}
+            {{ person_formset.management_form }}
+            <p>Student Details</p>
+            {{ student_formset|crispy }}
+            {{ student_formset.management_form }}
+            <input type="submit" class="btn btn-success w-25 mt-2" name="Create Student">
+        </form>
+    </div>
+{% endblock %}
+{% block javascript %}
+<script>
+    function updateCSV() {
+        console.log("CSV");
+
+        $.ajax({
+            url: "{% url 'downup' %}",
+            type: 'GET',
+            data: {},
+            success: function (response) {
+                alert("Success");
+            },
+            error: function (e) {
+                alert("Failed to update the csv file");
+            }
+        });
+    }
+</script>
+{% endblock %}

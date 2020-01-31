@@ -4,8 +4,9 @@
 {% block content %}
 <div class="container col-md-8 border my-2 py-2">
     <h5 class="text-center"> {{form.id_number.value|yesno:"Update,no,Create" }} A Citizen</h5>
-    <form method="POST">
+    <form method="POST" id="citizencreate">
         {% csrf_token %}
+        {% include 'person.html' %}
         {{ form|crispy }}
         <input type="submit" value="{{form.id_number.value|yesno:'Update,no,Create' }}" class="btn btn-success mt-2 w-25">
     </form>
@@ -20,6 +21,28 @@
         $("#id_dob").datepicker({
             dateFormat: "yy-mm-dd",
         });
+
+        $('#citizencreate').on('submit', function(e){
+            // e.preventDefault();
+            var data = $(this).serialize();
+            // submitCitizenData(data);
+        });
+
+        function submitCitizenData(data){
+            console.log(data);
+            $.ajax({
+                url: '{% url "citizen-create" %}',
+                data: data,
+                type: 'POST',
+                dataType: 'json',
+                success: function (reponse) {
+
+                },
+                error: function () {
+
+                }
+            });
+        }        
     });
 </script>
 {% endblock %}

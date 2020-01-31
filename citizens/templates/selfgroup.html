@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}
+    Self Help Group
+{% endblock %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+<div class="container text-dark">
+    <div class="row my-5">
+        <div class="col-md-8 col-sm-12 col-xs-12">
+          
+            <form action="" class="form-horizontal mb-4">
+                <input type="text" name="q" value="", class="form-control w-100" placeholder="Group Name">
+            </form>
+            <div class="">
+                <table class="table table-striped">
+                    <tr>
+                        <th>Name</th>
+                        <th>Registration Number</th>
+                        <th>Location</th>
+                        <th>Phone Number</th>
+                    </tr>
+                    {% for group in selfgroups %}
+                        <tr>
+                            <td>{{ group.name }}</td>
+                            <td>{{ group.reg_no }}</td>
+                            <td>{{ group.location }}</td>
+                            <td>{{ group.phone_number }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="row mb-2 mx-1">
+                <a href="{% url 'selfgroup-create' %}" class="btn btn-info">Add Self Help Group <i class="fa fa-plus"></i></a>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+{% block javascript %}
+
+{% endblock %}
