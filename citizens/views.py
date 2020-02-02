@@ -21,7 +21,7 @@ from .models import Citizen, Messages, Group, GroupEvents, Bursary, \
     Student, SponsoredStudent, Events, TeamMembers, Person, Results, Testimonials
 
 from django.forms import formset_factory
-from .forms import StudentForm, PersonForm, CitizenForm
+from .forms import StudentForm, PersonForm, CitizenForm, ResultsForm
 
 import os
 import csv
@@ -29,13 +29,14 @@ import json
 from datetime import timedelta
 
 # Change this to a class based view
-@login_required(login_url='/user/login')
 def home(request):
     context = {'data':'HOME IS WHERE MY HEART IS'}
     events = Events.objects.all()
     team_members = TeamMembers.objects.all()
     testimonials = Testimonials.objects.all()[:5]
-    return render(request,'index.html', {'events':events,'teams':team_members,'testimonials':testimonials})
+    values = [index for index, item in enumerate(testimonials)]
+    print(values)
+    return render(request,'index.html', {'events':events,'teams':team_members,'testimonials':testimonials,'values':values})
 
 
 class CitizenListView(LoginRequiredMixin, ListView):
@@ -251,6 +252,14 @@ def searchCitizen(id=None):
         results = Citizen.objects.filter(pk=id)
     return results
 
+def get_citizen(request):
+    query = request.GET.get('parent')
+    if query != None and query !='':
+        response = serialize('json',Citizen.objects.filter(id_number=query))
+    else:
+        response = serialize('json',Citizen.objects.filter(id_number==99999))
+
+    return HttpResponse(response)
 # Map the citizens data from the models to a csv file
 @login_required(login_url='/user/login')
 def citizen_data_to_csv(request):
@@ -378,10 +387,16 @@ class BursaryListView(LoginRequiredMixin,ListView):
     
 class BursaryCreateView(LoginRequiredMixin, CreateView):
     model = Bursary
-    template_name = 'createupdate.html'
+    template_name = 'bursary/bursarycreate.html'
     fields = "__all__"
     extra_context = {'title': 'Create Bursary'}
 
+    # def post(self,**args, **kwargs):
+    #     pass
+    # def form_valid(self,form):
+    #     pass
+    # def form_invalid(self):
+    #     pass
 class BursaryUpdateView(LoginRequiredMixin, UpdateView):
     model = Bursary
     template_name = 'createupdate.html'
@@ -464,7 +479,12 @@ class CollegeListView(LoginRequiredMixin,ListView):
     def get_queryset(self):
         query_name = self.request.GET.get('q')
         if query_name != None and query_name != '':
-            return College.objects.filter(citizen=query_name)
+            try:
+                query_name = int(query_name)
+                return College.objects.filter(citizen=query_name)
+            except ValueError:
+                return College.objects.filter(collage_name__icontains =query_name)
+            
         return super().get_queryset()
     
     def get_context_data(self, **kwargs):
@@ -534,6 +554,16 @@ class StudentListView(LoginRequiredMixin,ListView):
                 return queryset
         return super().get_queryset()
 
+def get_student(self):
+    query = request.GET.get('student')
+    if query != None and query != '':
+        try:
+            if isinstance(int(query),int):
+                response = serialize('json', Student.objects.filter(admission_number = query))
+                return HttpResponse(response)
+        except expression as identifier:
+            response = serialize('json',Student.objects.filter(school__icontains=school))
+            return HttpResponse(response)
 class StudentDetailView(LoginRequiredMixin,DetailView):
     model = Student
     template_name = "students/studentdetail.html" 
@@ -541,6 +571,7 @@ class StudentDetailView(LoginRequiredMixin,DetailView):
 
     def get_context_data(self,*args,**kwargs):
         context = super().get_context_data(**kwargs)
+        context['form'] = ResultsForm()
         context['results'] = Results.objects.filter(student = self.kwargs['pk'])
         return context
 
@@ -556,6 +587,29 @@ class StudentUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'createupdate.html'
     fields = '__all__'
     extra_context = {'title':'Update Student'}
+
+class StudentResultsCreateView(LoginRequiredMixin,CreateView):
+    model = Results
+    tempalate_name = 'forms.html'
+    form_class = ResultsForm
+    
+    def post(self, request, *args, **kwargs):
+        form = ResultsForm(self.request.POST)
+        if form.is_valid():
+            user = Student.objects.get(pk = kwargs['student_id'])
+            return self.form_valid(form,user)
+        else:
+            return self.form_invalid(form)
+    
+    def form_valid(self, form, user):
+        self.object = form.save(commit=False)
+        self.object.student =  user 
+        self.object.save()
+        return HttpResponse(serialize('json',Results.objects.filter(student = user )))
+
+    def form_invalid(self, form):
+        print("Invalid form")
+        return HttpResponse(serialize('json', Results.objects.filter(student=user)))
 
 # Team Members
 class TeamMembersListView(LoginRequiredMixin,ListView):
@@ -597,7 +651,7 @@ class CurriculumUpdateView(LoginRequiredMixin, UpdateView):
     extra_context = {"title": 'Add to CVs'}
 
 # Projects: CRUD
-class ProjectsListView(LoginRequiredMixin, ListView):
+class ProjectsListView(ListView):
     model = Project
     template_name = 'projects/projectlist.html'
     context_object_name = 'projects'
@@ -617,6 +671,8 @@ class ProjectsUpdateView(LoginRequiredMixin, UpdateView):
 
 from django.utils.timezone import make_aware
 import datetime
+
+@login_required(login_url='/user/login/')
 def createReports(request):
     # Get the current week, initialize a start anad end dates of the week
     date = timezone.now()
@@ -656,8 +712,15 @@ def createReports(request):
 #         return super().dispatch(request, *args, **kwargs)
     
 #     def get
+
+class ExportContacts:
+    def __init__(self, Model):
+        self.model = Model
     
-    
+    def export_contact(self):
+        return self.model
+        #  Get the contacts and
+
     
 # TODO :
 # Customize the CRUD to models related to person and citizen

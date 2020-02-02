@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 {% block title %}
-Group Detail
+    Group Detail
 {% endblock %}
+
+{% load crispy_forms_tags %}
 {% block content %}
 <div class="container my-5 mx-auto">
   <div class="row">
@@ -30,6 +32,7 @@ Group Detail
                     <td>Form {{ student.form }}</td>
                 </tr>
             </table>
+
       </div>
       <div class="col-md-8">
           <h5>Academic Information</h5>
@@ -41,7 +44,8 @@ Group Detail
                     <th>Year</th>
                     <th>Remarks</th>
                 </thead>
-                {% for result in results %}
+                <tbody class="table-body">
+                    {% for result in results %}
                     <tr>
                         <td>{{ result.grade }}</td>
                         <td>{{ result.term }}</td>
@@ -49,13 +53,75 @@ Group Detail
                         <td>{{ result.year }}</td>
                         <td>{{ result.remarks }}</td>
                     </tr>
-                {% endfor %}
+                    {% endfor %}
+                </tbody>
             </table>
             
       </div>
-  </div>
+  </div>  
+</div>
+
+<div class="container mb-3">
+    <div class="row">
+        <div class="col-md-7">
+            <h4 class=" text-center btn btn-info" id="result">Add results</h4>
+            <form method="POST" class="form-horizontal addresult">
+                {% csrf_token %}
+                {{form|crispy}}
+                <input type="submit" class="btn btn-success w-100 my-2">
+            </form>
+        </div>
+       
+    </div>
 </div>
 
 <!-- A modal to delete a group -->
 
+{% endblock %}
+{% block javascript %}
+    <script>
+        $(function(){
+            // Hide and show the form
+            $('#result').on('click', function(e){
+                $('.addresult').toggle('slow');
+                e.stopPropagation();
+            });
+
+            $('.addresult').on('submit', function(e){
+                e.preventDefault();
+                createResult($(this).serialize());
+            });
+
+            function createResult(data){
+                $.ajax({
+                    url:'/student/{{ student.pk }}/results/create/',
+                    data:data,
+                    type:'POST',
+                    success:function(response){
+                        alert(response);
+                        populateTable(JSON.parse(response));
+                        $('#result').removeData();
+                    },
+                    error:function(e){
+                        alert("Failed to submit the data try again");
+                    }
+                });
+            }
+
+            function getData(){
+
+            }
+
+            function populateTable(response){
+                console.log(response);
+                 var tableBody = document.getElementsByClassName('.table-body');
+                 tableBody.innerHTML = " ";
+
+                response.forEach(element => {
+                    var row = `<tr><td>${element.fields.grade}</td><td>${element.fields.term}</td><td>${element.fields.form}</td><td>${element.fields.year}</td><td>${element.fields.remarks}</td></tr>`;
+                    tableBody.append(row);
+                });
+            }
+        });
+    </script>
 {% endblock %}

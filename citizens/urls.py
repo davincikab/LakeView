@@ -52,6 +52,12 @@ urlpatterns = [
     path('student/create/', createStudent, name="create-student"),
     path('student/update/<int:pk>/', StudentUpdateView.as_view(), name="update-student"),
 
+    # Search
+    path('student/search/', get_student, name="search-student"),
+    path('citizen/search/', get_citizen,name = "search-citizen"),
+    # Student results
+    path('student/<student_id>/results/create/',StudentResultsCreateView.as_view(), name="results-create"),
+
     # NHIF
     path('nca/list/',NCAListView.as_view(),name = "nca-list"),
     path('nca/create/',NCACreateView.as_view(),name = "nca-create"),

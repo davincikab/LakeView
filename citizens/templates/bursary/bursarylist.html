@@ -5,45 +5,10 @@ Login
 {% load crispy_forms_tags %}
 {% load static %}
 {% block content %}
-<style>
-    body {
-        background-image: url('{% static "images/juliewolpers.jpg" %}');
-        background-repeat: no-repeat;
-        font-style: normal;
-        font-family: Georgia, 'Times New Roman', Times, serif;
-        font-size: small;
-    }
 
-    .container-fluid {
-        width: 100%;
-        height: auto;
-        background-color: #10E7DC70;
-        padding: 0;
-        margin: 0;
-    }
-
-    .login {
-        background-color: #ffffff60;
-        padding: 2%;
-    }
-
-    .btn-info {
-        /* background-color: #F79E02; */
-        /* border-color: #F79E02; */
-    }
-
-    .btn-info:hover {
-        background-color: #6CDAEE;
-        border-color: #F79E02;
-    }
-
-    .text-header {
-        margin-left: 0rem;
-    }
-</style>
-<div class="container-fluid text-dark">
-    <div class="row container my-5">
-        <div class="col-md-8 col-sm-8 col-xs-8">
+<div class="container-fluid text-dark mb-3">
+    <div class="row container">
+        <div class="col-md-9 col-sm-8 col-xs-8">
             <div class="row mx-1 mb-2">
                 <a href="{% url 'bursary-create' %}" class="btn btn-dark">Add Bursary <i class="fa fa-plus ml-2"></i></a>
                 <!-- <a href="#" class="btn btn-info"></a> -->
@@ -51,7 +16,7 @@ Login
             <form action="">
                 <input type="text" class="form-control w-100" name="q" id="query" placeholder="Parent ID or Student Admision Number or School">
             </form>
-            <table class="table">
+            <table class="table mt-2">
                 <tr>
                     <th>Parent</th>
                     <th>Student</th>
@@ -75,7 +40,7 @@ Login
             {% include 'paginate.html' %}
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-3 mb-5">
             <h5>Bursary Statistics</h5>
             <div class="" id="">
                 <ul class="list-group">

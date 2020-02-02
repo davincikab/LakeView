@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block title %}
+    Bursary Create
+{% endblock %}
+
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container my-3 mb-5">
+    <div class="row">
+        <div class="col-md-4 col-xs-12 my-1">
+            <p class="text-center">Search Parent and Student</p>
+            <form action="" class="student">
+                <!-- Search students  -->
+                <input type="text" placeholder="School Name or Admission Number" class="form-control" name='student'>
+            </form>
+            <div class="student-result">
+                <a href="">Add a student</a>
+            </div>
+            <form action="" class="parent my-2">
+                <!-- Search students  -->
+                <input type="text" placeholder="Parent ID" class="form-control" name='parent'>
+            </form>
+            <div class="parent-result">
+                <a href="">Add a Parent</a>
+            </div>
+        </div>
+        <div class="col-md-8 col-sm-12 col-lg-6 mx-2">
+            <p class="text-center">{{ title }}</p>
+            <form class="form-horizontal" method="POST" action="">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <input type="submit" value="{{title}}" class="btn btn-success mt-2">
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block javascript %}
+<script>
+    $(function () {
+
+        $('.student').on('submit', function (e) {
+            e.preventDefault();
+            createResult($(this).serialize());
+        });
+
+         $('.parent').on('submit', function (e) {
+            e.preventDefault();
+            createResult($(this).serialize());
+        });
+
+        function createResult(data) {
+            $.ajax({
+                url: '/student/{{ student.pk }}/results/create/',
+                data: data,
+                type: 'POST',
+                success: function (response) {
+                    alert(response);
+                    populateTable(JSON.parse(response));
+                    $('#result').removeData();
+                },
+                error: function (e) {
+                    alert("Failed to submit the data try again");
+                }
+            });
+        }
+
+        function getData() {
+
+        }
+
+        function populateResults(response) {
+            console.log(response);
+        }
+    });
+</script>
+{% endblock %}

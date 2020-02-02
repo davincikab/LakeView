@@ -4,7 +4,7 @@
 <div class="container mb-3 mt-3">
     <div class="row ">
         <form class="form-horizontal col-md-8" method="get">
-            <input class="form-control" type="text" name="q" id="" placeholder="Student Name or ID Number">
+            <input class="form-control" type="text" name="q" id="" placeholder="Collage Name or ID Number">
         </form>
         <div class="col-md-4 col-sm-12">
             <a href="{% url 'college-create' %}" class="btn btn-info mb-2 w-100"> Add to College<i class="fa fa-plus ml-2"></i></a>
@@ -43,20 +43,6 @@
 
         </div>
         <div class="col-md-4">
-            <!-- Messages Recent Issues -->
-            <div class="list-group">
-                <h5> Recent Messages</h5>
-                <ul class="list-group">
-                    {% for message in mymessages %}
-                    <li class="list-group-item"> {{message.content}} <small><a
-                                href="{% url 'college-detail' message.user.id_number %}">{{message.pk}}</a></small></li>
-                    {% endfor %}
-                </ul>
-                <div class="detail">
-
-                </div>
-
-            </div>
         </div>
     </div>
 </div>

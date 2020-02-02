@@ -6,9 +6,12 @@ html, body{
     font-size: medium;
 }
 
-#navbar{
-    color:white;
+.navbar{
+    
     font-size: 1.0em;
+}
+.navbar li > a{
+    color:black;
 }
 
 .body{
@@ -24,17 +27,24 @@ html, body{
     color:
 }
 
+.navigation{
+
+}
+
 .home{
     height:80vh;
 }
 
 .home-page{
-    padding-top:10rem;
+    padding-top:8rem;
 }
 
-.login{
-     /* margin-top:8rem; */
-     margin:5rem 1rem 0rem 1rem;
+.bg-green{
+    background-color:#8C920C;
+    /* color:ghostwhite; */
+}
+.text{
+    color:#8C920C;
 }
 
 .container-fluid {
@@ -96,3 +106,4 @@ footer{
     color: #beaed4 !important;
 }
 
+/* #D92B4B,#A62139,#D9D9D9,#0D0D0D,#73192A */

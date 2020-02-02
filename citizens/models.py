@@ -211,7 +211,7 @@ class Results(models.Model):
         return str(self.student)
 
     def get_absolute_url(self):
-        return reverse("student-detail", kwargs={"pk": self.student})
+        return reverse("student-detail", kwargs={"pk": self.student.pk})
 
 # Events
 class Events(models.Model):
@@ -315,7 +315,7 @@ class TeamMembers(models.Model):
     citizen = models.OneToOneField("Citizen", on_delete=models.CASCADE)
     role = models.CharField(max_length=50)
     area_allocated = models.CharField("Area Allocated", max_length=50)
-    picture = models.ImageField(default='download.png', upload_to="teammembers")
+    picture = models.ImageField(default='download.jpg', upload_to="teammembers")
 
     class Meta:
         verbose_name = "Team Member"
