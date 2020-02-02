@@ -2,7 +2,7 @@
 {% block title %}
     Bursary Create
 {% endblock %}
-
+{% load static %}
 {% load crispy_forms_tags %}
 {% block content %}
 <div class="container my-3 mb-5">
@@ -36,28 +36,51 @@
 </div>
 {% endblock %}
 {% block javascript %}
+<link rel="stylesheet" href="{% static 'jquery-ui.css'%}" />
+<script src="{% static 'jquery-ui.min.js'%}"></script>
 <script>
     $(function () {
+        var student_list;
+        var parent_list;
+
+        // Datepicker
+        $('#id_date_issued').datepicker({
+            dateFormat:'yy-mm-dd'
+        });
 
         $('.student').on('submit', function (e) {
             e.preventDefault();
-            createResult($(this).serialize());
+            getStudent($(this).serialize());
         });
 
          $('.parent').on('submit', function (e) {
             e.preventDefault();
-            createResult($(this).serialize());
+            getParent($(this).serialize());
         });
 
-        function createResult(data) {
+        function getParent(data) {
             $.ajax({
-                url: '/student/{{ student.pk }}/results/create/',
+                url: '/citizen/search/',
                 data: data,
-                type: 'POST',
+                type: 'GET',
                 success: function (response) {
-                    alert(response);
-                    populateTable(JSON.parse(response));
-                    $('#result').removeData();
+                    var res = JSON.parse(response);
+                    $('.parent-result').empty();
+                    //Populate the results 
+                    console.log(res);
+                    res.forEach(element => {
+                        $('.parent-result').append(
+                            `<li class="list-group-item">${element.pk}</li>`
+                        );
+                    });
+
+                    parent_list = document.querySelectorAll('.parent-result li');
+                    parent_list.forEach(el => {
+                        $(el).on('click', function (e) {
+                            console.log($(this).text());
+                            $('#id_parent').val($(this).text());
+                        });
+                    });
                 },
                 error: function (e) {
                     alert("Failed to submit the data try again");
@@ -65,13 +88,53 @@
             });
         }
 
-        function getData() {
+        function getStudent(data) {
+            $.ajax({
+                url: '/student/search/',
+                data: data,
+                type: 'GET',
+                success: function (response) {
+                    var res = JSON.parse(response);
+                     $('.student-result').empty();
+                    //Populate the results 
+                    console.log(res);
+                    res.forEach(element => {
+                         $('.student-result').append(
+                            `<li class="list-group-item">${element.pk} ${element.fields.admission_number} ${element.fields.school}</li>`
+                         );
+                    });
 
+                    student_list = document.querySelectorAll('.student-result li');
+                    student_list.forEach(el => {
+                        $(el).on('click', function(e){
+                            console.log($(this).text());
+                            var student_value = $(this).text().split(' ')[0]
+                            $('#id_student').val(student_value);
+                        });
+                    });                 
+                   
+                },
+                error: function (e) {
+                    alert("Failed to submit the data try again");
+                }
+            });
         }
 
-        function populateResults(response) {
-            console.log(response);
+        // Listen to click
+    
+
+        // student_list.forEach(el=>{
+        //     $(el).on('click', function(e){
+        //         console.log($(this).text());
+        //     });
+        // });
+
+        // 
+
+        function updateOption(data){
+            // 
         }
+
     });
 </script>
 {% endblock %}

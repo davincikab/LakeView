@@ -554,15 +554,15 @@ class StudentListView(LoginRequiredMixin,ListView):
                 return queryset
         return super().get_queryset()
 
-def get_student(self):
+def get_student(request):
     query = request.GET.get('student')
     if query != None and query != '':
         try:
             if isinstance(int(query),int):
                 response = serialize('json', Student.objects.filter(admission_number = query))
                 return HttpResponse(response)
-        except expression as identifier:
-            response = serialize('json',Student.objects.filter(school__icontains=school))
+        except ValueError:
+            response = serialize('json',Student.objects.filter(school__icontains=query))
             return HttpResponse(response)
 class StudentDetailView(LoginRequiredMixin,DetailView):
     model = Student

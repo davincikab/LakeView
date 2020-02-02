@@ -98,7 +98,6 @@
                     data:data,
                     type:'POST',
                     success:function(response){
-                        alert(response);
                         populateTable(JSON.parse(response));
                         $('#result').removeData();
                     },
@@ -114,12 +113,12 @@
 
             function populateTable(response){
                 console.log(response);
-                 var tableBody = document.getElementsByClassName('.table-body');
-                 tableBody.innerHTML = " ";
+                 var tableBody = document.getElementsByClassName('table-body');
+                 $(tableBody).html("");
 
                 response.forEach(element => {
                     var row = `<tr><td>${element.fields.grade}</td><td>${element.fields.term}</td><td>${element.fields.form}</td><td>${element.fields.year}</td><td>${element.fields.remarks}</td></tr>`;
-                    tableBody.append(row);
+                    $(tableBody).append(row);
                 });
             }
         });
