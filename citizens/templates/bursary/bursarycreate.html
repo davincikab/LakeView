@@ -14,14 +14,14 @@
                 <input type="text" placeholder="School Name or Admission Number" class="form-control" name='student'>
             </form>
             <div class="student-result">
-                <a href="">Add a student</a>
+                <a href="{% url 'create-student' %}">Add a student</a>
             </div>
             <form action="" class="parent my-2">
                 <!-- Search students  -->
                 <input type="text" placeholder="Parent ID" class="form-control" name='parent'>
             </form>
             <div class="parent-result">
-                <a href="">Add a Parent</a>
+                <a href="{% url 'citizen-create' %}">Add a Parent</a>
             </div>
         </div>
         <div class="col-md-8 col-sm-12 col-lg-6 mx-2">
@@ -118,21 +118,6 @@
                     alert("Failed to submit the data try again");
                 }
             });
-        }
-
-        // Listen to click
-    
-
-        // student_list.forEach(el=>{
-        //     $(el).on('click', function(e){
-        //         console.log($(this).text());
-        //     });
-        // });
-
-        // 
-
-        function updateOption(data){
-            // 
         }
 
     });
