@@ -70,9 +70,9 @@ class CitizenDetailView(LoginRequiredMixin, DetailView):
         context['members'] = Group.objects.filter(members=self.kwargs['pk'])
         context['groups'] = Group.objects.all()
         context['bursaries'] = Bursary.objects.filter(parent = self.kwargs['pk'])
-        context['cv'] = CuriculumVitae.objects.filter(citizen=self.kwargs['pk'])
-        context['nca'] = NCA.objects.filter(citizen=self.kwargs['pk'])
-        # context['nhif'] = Nhif.objects.get(citizen=self.kwargs['pk'])
+        context['cvs'] = CuriculumVitae.objects.filter(citizen=self.kwargs['pk'])
+        context['ncas'] = NCA.objects.filter(citizen=self.kwargs['pk'])
+        context['nhifs'] = Nhif.objects.filter(citizen=self.kwargs['pk'])
         return context
     
     def get_queryset(self):
