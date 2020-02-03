@@ -88,25 +88,27 @@
 
     <div class="row mb-2 w-100">        
         <div class="col-md-6">
+            <p class="h5">National Construction Authority</p>
             {% if nca.citizen %}
-                <p class="h5">National Construction Authority</p>
                 <p>Processing Status {{ nca.processing_status }}</p>
                 <div class="btn-group">
                     <a href="" class="btn btn-outline-dark btn-sm"> Update </a>
                     <!-- <a href="" class="btn btn-outline-dark btn-sm">Delete</a> -->
                 </div>
             {% endif %}
+            <a href="{% url 'nca-create' %}" class="btn btn-outline-default"> Add</a>
         </div>
 
         <div class="col-md-6">
+            <h5>National Health Insurance Fund<br></h5>
             {% if nhif.pk %}
-                <h5>National Health Insurance Fund<br></h5>
                 <p>Processing Status <strong>{{ nhif.ispending }} True</strong></p>
                 <div class="btn-group">
                     <a href="{% url 'nhif-update' nhif.pk %}" class="btn btn-outline-dark btn-sm"> Update </a>
                     <!-- <a href="" class="btn btn-outline-dark btn-sm">Delete</a> -->
                 </div>
             {% endif %}
+            <a href="{% url 'nhif-create' %}" class="btn btn-outline-default"> Add</a>
         </div>
     </div>
 
