@@ -4,14 +4,17 @@ html, body{
     font-style: normal;
     font-family:'Times New Roman', Times, serif;
     font-size: medium;
+    font-weight: 900;
 }
 
-.navbar{
-    
+.navbar {
     font-size: 1.0em;
+    font-weight: 1200;
 }
 .navbar li > a{
-    color:black;
+    /* color:black; */
+    color: #fff;
+    font-size: 1.1em;
 }
 
 .body{
@@ -28,7 +31,7 @@ html, body{
 }
 
 .navigation{
-
+    font-weight: bolder;
 }
 
 .home{
@@ -40,8 +43,10 @@ html, body{
 }
 
 .bg-green{
-    background-color:#8C920C;
-    /* color:ghostwhite; */
+    /* background-color:#8C920C; */
+    background-color: #6DCEF9;
+    /* color:ghostwhite !important; */
+    
 }
 .text{
     color:#8C920C;

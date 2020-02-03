@@ -5,11 +5,14 @@
 {% block content %}
 <style>
     .card{
-        /* background-color: rgb(54, 54, 54); */
+        /* background-color: #8C920C; */
         border-radius: 12px;
     }
     .card-body a{
-        color: rgb(236, 235, 235);
+        color: #8C920C;
+    }
+    .card-body{
+        /* background-color: #89b439; */
     }
 
     a:hover{
@@ -26,7 +29,7 @@
             <!-- <a href="{% url 'group-create'%}" class="btn btn-info mb-2"> Create Group <i class="fa fa-plus"></i></a> -->
             <div class="row">
 
-                <div class="card col-md-5 mx-3 mb-3 bg-dark ">
+                <div class="card col-md-5 mx-3 mb-3">
                     <div class="card-body px-2">
                         <h4><a href="#" class="nav-link">Sponsored Students</a></h4>
                     </div>
@@ -100,7 +103,7 @@
             var elements = document.querySelectorAll('.card');
 
             elements.forEach(element=>{
-                element.classList.add('bg-dark');
+                element.classList.add('bg-light');
             })
         });
     </script>

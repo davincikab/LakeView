@@ -58,10 +58,10 @@
         <div class="home ">
             <div class="container home-page text-center text">
                 <div class="">
-                    <h2 class="text">Lakeview Ward, Nakuru County</h2>
-                    <p class="h5 text-dark">Towards people driven development</p>
+                    <h2 class="text-dark">Lakeview Ward, Nakuru County</h2>
+                    <p class="h5 text-white">Towards people driven development</p>
                     <!-- <div class="button-group"> -->
-                    <a href="{% url 'list-view' %}" class="btn btn-dark pl-2 mr-2 w-25">People</a>
+                    <a href="{% url 'list-view' %}" class="btn bg-green pl-2 text-white mr-2 w-25">People</a>
                     <a href="{% url 'group-list' %}" class="btn btn-light pl-3 w-25">Groups</a>
                     <!-- </div> -->
                     <p class="text-white mt-2">
@@ -77,8 +77,8 @@
             <p class="text-center"><i class="fa fa-2x fa-angle-down"></i></p>
             <div class="card-deck">
                 {% for event in events %}
-                    <div class="col-md-3 mb-2 mx-5 boxed-grey">
-                        <div class="card-header bg-green">
+                    <div class="col-md-3 mb-2 mx-5 bg-light boxed-grey">
+                        <div class="card-header bold bg-green" >
                             {{event.title}}<br>
                             <small>{{ event.time }}</small>
                         </div>
@@ -108,7 +108,7 @@
                     <!-- Indicators -->
                     {% for testimonial in testimonials %}
                         <div class="carousel-item">
-                            <div class="jumbotron bg-white">
+                            <div class="jumbotron">
                                 <h1 class="display-4">{{ testimonial.name }}</h1>
                                 <p class="lead text">
                                     {{ testimonial.content }}
@@ -143,9 +143,9 @@
                 {% for member in teams %}
                     <div class="col-xs-6 col-sm-3 col-md-3 text-center mb-5">
                         <div class="wow bounceInUp" data-wow-delay="0.2s">
-                            <div class="team boxed-grey">
+                            <div class="team bg-light py-2">
                                 <div class="inner">
-                                    <h5>{{ member.citizen.person.get_person }}</h5>
+                                    <h5 class="text">{{ member.citizen.person.get_person }}</h5>
                                     <p class="subtitle">{{ member.role }}</p>
                                     <div class="avatar"><img src="{% get_media_prefix %}{{ member.picture }}" alt="" class="img-responsive img-circle" /></div>
                                     <p class="mt-2">{{ member.area_allocated }}</p>
@@ -157,21 +157,21 @@
             </div>
         </div>
 
-        <div class="container-fluid py-3 px-2">
+        <div class="container-fluid py-3 px-2 ">
             <h2 class="text-center ">CONTACT US</h2>
             <p class="text-center"><i class="fa fa-2x fa-angle-down"></i></p>
-            <div class="row mx-5 my-2">
+            <div class="row mx-5 my-2 bg-white">
                 <div class="col-md-4">
-                    <h5>Phone Number</h5>
-                    <p>+254 704893840</p>
+                    <h5 class="text">Phone Number</h5>
+                    <p class="text-black">+254 704893840</p>
                 </div>
                 <div class="col-md-4">
-                    <h5>Email Address</h5>
-                    <p>+254 704893840</p>
+                    <h5 class="text">Email Address</h5>
+                    <p class="">+254 704893840</p>
                 </div>
                 <div class="col-md-4">
-                    <h5>Physical Address</h5>
-                    <p>Adams Building along Naivasha - Nairobi Highway</p>
+                    <h5 class="text">Physical Address</h5>
+                    <p class="">Adams Building along Naivasha - Nairobi Highway</p>
                 </div>
             </div>
         </div>
