@@ -43,7 +43,7 @@ class CitizenListView(LoginRequiredMixin, ListView):
     model = Citizen
     context_object_name = 'citizens'
     template_name  = 'citizen/citizenlist.html'
-    paginate_by = 7
+    paginate_by = 25
     ordering = '-id_number'
 
     def get_queryset(self):
@@ -282,9 +282,9 @@ def citizen_data_to_csv(request):
         groups = ' ::: '.join([gp.name for gp in citizen.group_set.all()])
         #"Women ::: Farmer ::: * coworkers ::: * friends ::: * myContacts"
         csv_file.writerow(
-                {'Name':citizen.first_name,'Given Name':citizen.last_name,'Additional Name':'','Family Name':citizen.surname,'Yomi Name':'',
+                {'Name':citizen.person.first_name,'Given Name':citizen.person.last_name,'Additional Name':'','Family Name':citizen.person.surname,'Yomi Name':'',
                 'Given Name Yomi':'','Additional Name Yomi':'', 'Family Name Yomi':'', 'Name Prefix':'', 'Name Suffix':'', 'Initials':'',
-                'Nickname':'', 'Short Name':'', 'Maiden Name':'', 'Birthday':citizen.dob, 'Gender':citizen.get_gender_display(), 'Location':citizen.location,
+                'Nickname':'', 'Short Name':'', 'Maiden Name':'', 'Birthday':citizen.person.dob, 'Gender':citizen.person.get_gender_display(), 'Location':citizen.location,
                 'Billing Information':'','Directory Server':'', 'Mileage':'', 'Occupation':'', 'Hobby':'', 'Sensitivity':'', 'Language':'', 'Photo':'', 
                 'Group Membership':groups,'Phone 1 - Type':'Mobile', 'Phone 1 - Value':f"+254 {int(citizen.phone_number)}"
                 }
@@ -408,6 +408,23 @@ class NhifListView(LoginRequiredMixin, ListView):
     model = Nhif
     template_name = 'nhiflist.html'
     context_object_name = 'nhifs'
+    paginate_by = 25
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        if query !=None and query != '':
+            try:
+                if (isinstance(int(query),int)):
+                    return super().get_queryset().filter(citizen=query)
+            except ValueError:
+                return super().get_queryset().filter(ispending=query.title())
+        return super().get_queryset()
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+    
+    
 
 class NhifCreateView(LoginRequiredMixin, CreateView):
     model = Nhif
@@ -426,6 +443,23 @@ class NCAListView(LoginRequiredMixin,ListView):
     model = NCA
     template_name = 'ncalist.html'
     context_object_name = 'ncas'
+    paginate_by = 25
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        if query != None and query != '':
+            try:
+                if (isinstance(int(query), int)):
+                    return super().get_queryset().filter(citizen=query)
+            except ValueError:
+                return super().get_queryset().filter(processing_status=query.title())
+        return super().get_queryset()
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+    
+    
 
 class NCACreateView(LoginRequiredMixin,CreateView):
     model = NCA
@@ -444,6 +478,7 @@ class SelfHelpGroupListView(LoginRequiredMixin,ListView):
     model = SelfHelpGroup
     template_name = 'selfgroup.html'
     context_object_name = 'selfgroups'
+    paginate_by = 25
 
     def get_queryset(self):
         query = self.request.GET.get('q')
@@ -499,6 +534,8 @@ class CollegeCreateView(LoginRequiredMixin,CreateView):
 
 class CollegeDetailView(LoginRequiredMixin,DetailView):
     model = College
+    template_name = "students/collegedetail.html"
+    context_object_name = "collage"
 
 class CollegeUpdateView(LoginRequiredMixin, UpdateView):
     model = College
@@ -616,6 +653,7 @@ class TeamMembersListView(LoginRequiredMixin,ListView):
     model = TeamMembers
     context_object_name = 'teams'
     template_name = "teamlist.html"
+    paginate_by = 25
 
 class TeamMembersCreateView(LoginRequiredMixin,CreateView):
     model = TeamMembers
@@ -635,6 +673,7 @@ class CurriculumListView(LoginRequiredMixin,ListView):
     model = CuriculumVitae
     template_name = "cvlist.html"
     context_object_name = 'cvs'
+    paginate_by = 25
 
 
 class CurriculumCreateView(LoginRequiredMixin,CreateView):
@@ -655,6 +694,7 @@ class ProjectsListView(ListView):
     model = Project
     template_name = 'projects/projectlist.html'
     context_object_name = 'projects'
+    paginate_by = 25
 
 class ProjectsCreateView(LoginRequiredMixin,CreateView):
     model = Project

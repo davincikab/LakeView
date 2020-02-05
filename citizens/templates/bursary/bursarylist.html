@@ -10,8 +10,10 @@ Login
     <div class="row container">
         <div class="col-md-9 col-sm-8 col-xs-8">
             <div class="row mx-1 mb-2">
-                <a href="{% url 'bursary-create' %}" class="btn btn-dark">Add Bursary <i class="fa fa-plus ml-2"></i></a>
-                <!-- <a href="#" class="btn btn-info"></a> -->
+                {% if user.is_admin %}
+                    <a href="{% url 'bursary-create' %}" class="btn btn-dark">Add Bursary <i class="fa fa-plus ml-2"></i></a>
+                    <!-- <a href="#" class="btn btn-info"></a> -->
+                {% endif %}
             </div>
             <form action="">
                 <input type="text" class="form-control w-100" name="q" id="query" placeholder="Parent ID or Student Admision Number or School">

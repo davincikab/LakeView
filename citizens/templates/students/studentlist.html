@@ -5,14 +5,18 @@
 {% load static %}
 {% block content %}
 <div class="container">
+    <h2 class="ml-3">STUDENT</h2>
     <div class="container mb-3 mt-3">
         <div class="row ">
             <form class="form-horizontal col-md-8" method="get">
                 <input class="form-control" type="text" name="q" id="" placeholder="Student Name or Admission Number">
             </form>
             <div class="col-md-4 col-sm-12">
+                {% if user.is_admin %}
                 <a href="{% url 'create-student' %}" class="btn btn-info mb-2 w-100"> Create student<i
                         class="fa fa-plus ml-2"></i></a>
+                
+                {% endif %}
     
             </div>
         </div>
@@ -51,7 +55,7 @@
             <div class="col-md-4">
                 <!-- Messages Recent Issues -->
                 <div class="list-group">
-                    <h5> Recent Messages</h5>
+                    <h5> Recent Student Activities</h5>
                     <ul class="list-group">
                         {% for message in mymessages %}
                         <li class="list-group-item"> {{message.content}} <small><a

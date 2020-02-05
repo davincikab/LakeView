@@ -82,6 +82,7 @@ urlpatterns = [
     path('college/', CollegeListView.as_view(), name="college-list"),
     path('college/create/', CollegeCreateView.as_view(), name="college-create"),
     path('college/update/<int:pk>/',CollegeUpdateView.as_view(), name="college-update"),
+    path('college/detail/<int:pk>/',CollegeDetailView.as_view(), name="college-detail"),
 
     # Others
     path('addtogroup/',add_to_group,name="add-group"),

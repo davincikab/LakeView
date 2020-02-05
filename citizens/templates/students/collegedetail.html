@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}
+Student Detail Detail
+{% endblock %}
+
+{% load crispy_forms_tags %}
+{% block content %} 
+<style>
+</style>
+    <div class="container my-5 mx-auto">
+        <div class="row">
+            <div class="col-md-8 offset-2 border">
+                <p class="text-center bold mt-2 {% if collage.is_dropout %} text-danger bg-danger {%else%} text-white bg-success {% endif %}">{{ collage.citizen.person }}
+                <small>
+                    <a href="{% url 'college-update' collage.pk %}" class="btn btn-default ml-3 btn-sm text-white"><i class="fa fa-pen "></i></a>
+                </small>
+                </p>
+                <hr>
+                <div class="row">
+                    <div class="col-md-6 border-right">
+                        <p> Name </p>
+                        <p>Gender</p>
+                        <p>Collage</p>
+                        <p>Date Enrolled</p>
+                        <p>Course</p>
+                        <p>Duration</p>
+                        <p>Drop Out</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p>{{ collage.citizen.person }}</p>
+                        <p>{{ collage.citizen.person.get_gender_display }}</p>
+                        <p>{{ collage.collage_name }}</p>
+                        <p>{{ collage.date_enrolled }}</p>
+                        <p>{{ collage.course }} years </p>
+                        <p>{{ collage.duration }}</p>
+                        <p>{{ collage.is_dropout }}</p>
+                    </div>
+                </div>
+               
+            </div>
+            <div class="col-md-4">
+            
+            </div>
+        </div>
+    </div>
+{% endblock %}

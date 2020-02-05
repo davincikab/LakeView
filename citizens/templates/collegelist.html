@@ -2,13 +2,15 @@
 {% load static %}
 {% block content %}
 <div class="container mb-3 mt-3">
+    <h2>COLLEGE STUDENTS </h2>
     <div class="row ">
         <form class="form-horizontal col-md-8" method="get">
             <input class="form-control" type="text" name="q" id="" placeholder="Collage Name or ID Number">
         </form>
         <div class="col-md-4 col-sm-12">
-            <a href="{% url 'college-create' %}" class="btn btn-info mb-2 w-100"> Add to College<i class="fa fa-plus ml-2"></i></a>
-            
+            {% if user.is_admin %}
+                <a href="{% url 'college-create' %}" class="btn btn-info mb-2 w-100"> Add to College<i class="fa fa-plus ml-2"></i></a>
+            {% endif %}
         </div>
     </div>
 </div>
@@ -27,7 +29,7 @@
                 {% for college in colleges %}
                     <tr>
                         <td class="item">
-                            <h5><a href="{% url 'college-update' college.pk %}" >{{ college.citizen.person.get_person }}</a></h5>
+                            <h5><a href="{% url 'college-detail' college.pk %}" >{{ college.citizen.person.get_person }}</a></h5>
                         </td>
                         <td>{{ college.citizen.person.get_gender_display }}</td>
                         <td>{{ college.collage_name }}</td>
@@ -44,6 +46,9 @@
         </div>
         <div class="col-md-4">
         </div>
+    </div>
+    <div class="container ml-5">
+        {% include 'paginate.html' %}
     </div>
 </div>
 

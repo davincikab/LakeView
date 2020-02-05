@@ -4,11 +4,13 @@
 <div class="container mb-3 mt-3">
     <div class="row ">
         <form class="form-horizontal col-md-8" method="get">
-            <input class="form-control" type="text" name="q" id="" placeholder="Id Number">
+            <input class="form-control mb-2" type="text" name="q" id="" placeholder="Id Number">
         </form>
         <div class="col-md-4 col-sm-12"> 
-            <a href="{% url 'citizen-create' %}" class="btn btn-info mb-2 w-100"> Add<i class="fa fa-plus ml-2"></i></a>
+            {% if user.is_admin %}
+            <a href="{% url 'citizen-create' %}" class="btn btn-info  w-100"> Add<i class="fa fa-plus ml-2"></i></a>
             <!-- <button class="btn btn-info mb-2" onclick="updateCSV()">Update Download Contacts</button> -->
+            {% endif %}
         </div> 
     </div>
 </div>

@@ -6,14 +6,15 @@ Self Help Group
 {% load static %}
 {% block content %}
 <div class="container text-dark">
+    <h2 class="text-center">NATIONAL HEALTH INSURANCE FUND</h2>
     <div class="row mx-2 my-5">
         <div class="col-md-8 col-sm-12 col-xs-12">
-            <div class="row mb-2">
-                <a href="{% url 'nhif-create' %}" class="btn btn-info">Add New NHIF Entry 
-                    <i class="fa fa-plus ml-3" ></i></a>
+            <div class="row w-100">
+                <form action="" method="get" class="w-100 my-2">
+                    <input type="text" name="q" class="form-control" placeholder="ID Number or Processing Status">
+                </form>
             </div>
             <div class="row">
-                
                 <table class="table table-stripped">
                     <tr>
                         <th>Name</th>
@@ -29,11 +30,29 @@ Self Help Group
                     {% endfor %}
                 </table>
             </div>
+            <div class="container ml-5">
+                {% include 'paginate.html' %}
+            </div>
         </div>
 
         <div class="col-md-4">
-        </div>
+            <div class="row mb-2 mx-1">
+                {% if user.is_admin %}
+                <a href="{% url 'nhif-create' %}" class="btn btn-info w-75">Add New NHIF Entry
+                    <i class="fa fa-plus ml-3"></i></a>
+                {% endif %}
+                <!-- Simple Statistics -->
+                <div class="card-deck w-100 mt-2">
+                    <div class="card">
+                        <div class="card-body">
+                            <!-- Processed  -->
+                        </div>
+                    </div>
+                </div>
 
+            </div>
+        </div>
+        
     </div>
 </div>
 {% endblock %}

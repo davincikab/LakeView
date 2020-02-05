@@ -28,13 +28,17 @@
     }
 </style>
 <div class="container">
+    <h2 class="text-center"> TEAM MEMBERS</h2>
     <div class="row container my-5">
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="row mb-2">
-                <a href="{% url 'team-create' %}" class="btn btn-dark">
-                    Add New Team Entry
-                    <i class="fa fa-plus ml-3"></i>
-                </a>
+
+                {% if user.is_admin %}
+                    <a href="{% url 'team-create' %}" class="btn btn-dark">
+                        Add New Team Entry
+                        <i class="fa fa-plus ml-3"></i>
+                    </a>
+                {% endif %}
             </div>
             <div class="row">
 
@@ -46,12 +50,22 @@
                     </tr>
                     {% for team in teams %}
                     <tr>
-                        <td><a href="{% url 'team-update' team.pk %}">{{ team.citizen.person.get_person }}</a></td>
+                        <td>
+                            {% if user.is_admin %}
+                            <a href="{% url 'team-update' team.pk %}">{{ team.citizen.person.get_person }}</a>
+                            {% else %}
+                                {{ team.citizen.person.get_person }}
+                            {% endif %}
+                        </td>
                         <td>{{ team.role }}</td>
                         <td>{{ team.area_allocated }}</td>
                     </tr>
                     {% endfor %}
                 </table>
+            </div>
+
+            <div class="container ml-5">
+                {% include 'paginate.html' %}
             </div>
         </div>
 

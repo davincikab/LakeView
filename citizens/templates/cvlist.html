@@ -6,11 +6,15 @@
 {% load static %}
 {% block content %}
 <div class="container text-dark">
+    <h2>Curriculum Vitae</h2>
     <div class="row my-5 mx-2">
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="row mb-2">
-                <a href="{% url 'cv-create' %}" class="btn btn-info">Add New CV Entry
-                    <i class="fa fa-plus ml-3"></i></a>
+                {% if user.is_admin %}
+                    <a href="{% url 'cv-create' %}" class="btn btn-info">Add New CV Entry
+                        <i class="fa fa-plus ml-3"></i>
+                    </a>
+                {% endif %}
             </div>
             <div class="row">
                 <table class="table table-responsive">
@@ -25,6 +29,9 @@
                         </tr>
                     {% endfor %}
                 </table>
+            </div>
+            <div class="container ml-5">
+                {% include 'paginate.html' %}
             </div>
         </div>
 

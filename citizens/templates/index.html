@@ -77,7 +77,7 @@
             <p class="text-center"><i class="fa fa-2x fa-angle-down"></i></p>
             <div class="card-deck">
                 {% for event in events %}
-                    <div class="col-md-3 mb-2 mx-5 bg-light boxed-grey">
+                    <div class="col-md-3 mb-2 mx-3 bg-light boxed-grey">
                         <div class="card-header bold bg-green" >
                             {{event.title}}<br>
                             <small>{{ event.time }}</small>
@@ -86,12 +86,19 @@
                             <p> Venue: <strong>{{ event.venue }}</strong></p>
                             {{event.content}}
                         
-                        </div>
-                        
-                        
+                        </div>  
+                        {% if user.is_admin %}
+                            <div class="mt-3">
+                                <a href="{% url 'event-update' event.pk %}" class="mt-5"> <i class="fa fa-pen"></i class="fa fa-pen" > Update Event</a>
+                            </div>
+                        {% endif %}
+                                              
                     </div>
                 {% endfor %}
             </div>
+            {% if user.is_admin %}
+                <a href="{% url 'event-create' %}">Add Event</a>
+            {% endif %}
         </div>
 
         <div class="container py-3 px-2">

@@ -6,14 +6,15 @@
 {% block content %}
 <div class="container my-3">
     <div class="row">
-        <div class="col-md-3 col-lg-3 col-sm-12 mt-2">
-            <a href="{% url 'citizen-update' citizen.pk %}" class="btn btn-dark link mb-2"> Update citizen <i class="fa fa-pen ml-2"></i></a>
-            <a href="{% url 'citizen-delete' citizen.pk %} " class="btn btn-dark text-danger link mb-2"> Delete citizen <i class="fa fa-trash ml-2"></i></a>
-            <a href="/citizen/{{citizen.pk}}/message/create/" class="btn btn-dark link mb-2"> Add a Message <i class="fa fa-envelope ml-2"></i></a>
-            <!-- <button class="btn btn-dark link" data-toggle="modal" data-target="#modalData" > Add to Group<i class="fa fa-user ml-2"></i></button> -->
-
-        </div>
-        <div class="col-lg-5 col-md-5 col-sm-12 mt-2">
+        {% if user.is_admin %}
+            <div class="col-md-3 col-lg-3 col-sm-12 mt-2">
+                <a href="{% url 'citizen-update' citizen.pk %}" class="btn btn-dark link mb-2"> Update citizen <i class="fa fa-pen ml-2"></i></a>
+                <a href="{% url 'citizen-delete' citizen.pk %} " class="btn btn-dark text-danger link mb-2"> Delete citizen <i class="fa fa-trash ml-2"></i></a>
+                <a href="/citizen/{{citizen.pk}}/message/create/" class="btn btn-dark link mb-2"> Add a Message <i class="fa fa-envelope ml-2"></i></a>
+                <!-- <button class="btn btn-dark link" data-toggle="modal" data-target="#modalData" > Add to Group<i class="fa fa-user ml-2"></i></button> -->
+            </div>
+        {% endif %}
+        <div class="{% if user.is_admin %}col-lg-5 col-md-5 col-sm-12 mt-2 {% else %} col-md-8 col-lg-8 col-sm-12 {% endif %}">
             
             <h3>{{ citizen.person.surname }} {{ citizen.person.first_name }} {{ citizen.person.last_name}}</h3>
             <p></p>
@@ -69,7 +70,9 @@
                 <div class="collapse" id="collapse{{message.pk}}">
                     <p>
                         <small>{{ message.type_of_issue }}</small>
-                        <a href="/citizen/{{message.user.id_number}}/message/{{message.pk}}/update/"> Update </a>
+                        {% if user.is_admin %}
+                            <a href="/citizen/{{message.user.id_number}}/message/{{message.pk}}/update/"> Update </a>
+                        {% endif %}
                     </p>
                 
                         <p class="text-black">{{ message.content }}</p style="color:green">
@@ -84,19 +87,28 @@
 <!-- Services The Citizen Benefitd from -->
 <div class="container">
 <div class="row mt-3 w-100">
-    <h4 class="text-center"> Services Recieved</h4>
-
+    <div class="row bg-green text-white w-100">
+        <h4 class="text-center"> Services Recieved</h4>
+    </div>
+    
     <div class="row mb-2 w-100">        
         <div class="col-md-6">
             <p class="h5">National Construction Authority</p>
             {% for nca in ncas %}
                 <p>Processing Status {{ nca.processing_status }}</p>
                 <div class="btn-group">
-                    <a href="/nca/update/{{nca.pk}}/" class=""> Update </a>
+                    {% if user.is_admin %}
+                        <a href="/nca/update/{{nca.pk}}/" class=""> Update </a>
+                    {% endif %}
                     <!-- <a href="" class="btn btn-outline-dark btn-sm">Delete</a> -->
+                    {% if not nca %}
+                        {% if user.is_admin %}
+                            <a href="{% url 'nca-create' %}" class="btn btn-outline-default"> Add</a>
+                        {% endif %}
+                    {% endif %}
                 </div>
             {% endfor %}
-            <a href="{% url 'nca-create' %}" class="btn btn-outline-default"> Add</a>
+            
         </div>
 
         <div class="col-md-6">
@@ -104,11 +116,18 @@
             {% for nhif in nhifs %}
                 <p>Processing Status <strong>{{ nhif.ispending }} True</strong></p>
                 <div class="btn-group">
-                    <a href="{% url 'nhif-update' nhif.pk %}" class=""> Update </a>
+                    {% if user.is_admin %}
+                        <a href="{% url 'nhif-update' nhif.pk %}" class=""> Update </a>
+                    {% endif %}
                     <!-- <a href="" class="btn btn-outline-dark btn-sm">Delete</a> -->
+                    {% if not  nhif %}
+                        {% if user.is_admin %}
+                            <a href="{% url 'nhif-create' %}" class="btn btn-outline-default"> Add</a>
+                        {% endif %}
+                    {% endif %}
                 </div>
             {% endfor %}
-            <a href="{% url 'nhif-create' %}" class="btn btn-outline-default"> Add</a>
+            
         </div>
     </div>
 
@@ -132,23 +151,29 @@
                 </tr>
                 {% endfor %}
             </table>
-            <a href="{% url 'bursary-create' %}" class="btn btn-outline-default"> Add</a>
+            {% if user.is_admin %}
+                <a href="{% url 'bursary-create' %}" class="btn btn-outline-default"> Add</a>
+            {% endif %}
         </div>
         <div class="col-md-6">
             <h5>Curriculum Vitae</h5>
             {% for cv in cvs %}
             <div class="">
-                {{ cv.qualifications }}
-                {{ cv.pk }}
-                <div class="btn-group">
-                    <a href="{% url 'cv-update' cv.pk %}" class=""> Update </a>
+                <p>{{ cv.qualifications }}</p>
+                <div class="btn-group mt-2">
+                    {% if user.is_admin %}
+                        <a href="{% url 'cv-update' cv.pk %}" class=""> Update </a>
+                    {% endif %}
                     <!-- <a href="#" class="btn btn-outline-dark btn-sm">Delete</a> -->
+               
+                    {% if not cv %}
+                        {% if user.is_admin %}
+                            <a href="{% url 'cv-create' %}" class="ml-2"> Add </a>
+                        {% endif %}
+                    {% endif %}
                 </div>
-                
             </div>
             {% endfor %}
-                <a href="{% url 'cv-create' %}" class=""> Add </a>
-            
             
         </div>
     </div>
