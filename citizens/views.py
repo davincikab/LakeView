@@ -12,7 +12,10 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from django.conf import settings
 from django.utils import timezone
+
 from django.core.serializers import serialize
+from django.core.paginator import Paginator
+
 from django.db.models import Count, Sum
 from django.db.models import Q
 
@@ -718,6 +721,7 @@ def createReports(request):
     date = timezone.now()
     start_date = timezone.now() - timedelta(days = date.isoweekday())
     end_date = start_date + timedelta(days=5)
+    
     if request.GET.get('start_date') != None and request.GET.get('end_date') != None:
         start_date = make_aware(
             datetime.datetime.strptime(
@@ -738,7 +742,13 @@ def createReports(request):
         future_date = date + timedelta(days=5)
         citizen = citizen = Messages.objects.filter(
             Q(date_created__lte=end_date), Q(date_created__gte=start_date))
-    return render(request,'report.html',{'weekreport':citizen,'start_date':start_date,'end_date':end_date})
+
+    paginator = Paginator(citizen,25)
+    page = request.GET.get('page')
+
+    page_obj = paginator.get_page(page)
+
+    return render(request,'report.html',{'page_obj':page_obj,'start_date':start_date,'end_date':end_date})
 
 # class ReportView(TemplateView):
 #     template_name = "report.html"
