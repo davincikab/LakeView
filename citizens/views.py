@@ -54,7 +54,7 @@ class CitizenListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["mymessages"] = Messages.objects.filter(is_sorted=False).order_by('-date_created') 
+        context["mymessages"] = Messages.objects.filter(is_sorted=False).order_by('-date_created')[:10] 
         return context
     
 

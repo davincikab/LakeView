@@ -7,13 +7,16 @@
 {% block content %}
 <div class="container text-dark">
     <h2>SELF HELP GROUPs</h2>
-    <div class="row my-5">
+    <div class="row my-3">
         <div class="col-md-8 col-sm-12 col-xs-12">
-          
+            {% if user.is_admin %}
+                <a href="{% url 'selfgroup-create' %}" class="btn btn-info mb-2">Add Self Help Group <i class="fa fa-plus"></i></a>
+            {% endif %}
             <form action="" class="form-horizontal mb-4">
                 <input type="text" name="q" value="", class="form-control w-100" placeholder="Group Name">
             </form>
-            <div class="">
+
+            <div class="mr-2">
                 <table class="table table-striped">
                     <tr>
                         <th>Name</th>
@@ -39,9 +42,7 @@
 
         <div class="col-md-4">
             <div class="row mb-2 mx-1">
-                {% if user.is_admin %}
-                    <a href="{% url 'selfgroup-create' %}" class="btn btn-info">Add Self Help Group <i class="fa fa-plus"></i></a>
-                {% endif %}
+               
             </div>
         </div>
 

@@ -28,8 +28,8 @@
                 </tr>
                 {% for college in colleges %}
                     <tr>
-                        <td class="item">
-                            <h5><a href="{% url 'college-detail' college.pk %}" >{{ college.citizen.person.get_person }}</a></h5>
+                        <td class="">
+                        <a href="/college/detail/{{college.pk}}" class="">{{ college.citizen.person.get_person }}</a>
                         </td>
                         <td>{{ college.citizen.person.get_gender_display }}</td>
                         <td>{{ college.collage_name }}</td>
@@ -46,9 +46,6 @@
         </div>
         <div class="col-md-4">
         </div>
-    </div>
-    <div class="container ml-5">
-        {% include 'paginate.html' %}
     </div>
 </div>
 

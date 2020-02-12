@@ -6,10 +6,13 @@
 {% load static %}
 {% block content %}
 <div class="container text-dark">
-    <h2>NATIONAL CONSTRUCTION AUTHORITY</h2>
+    <h2 class="text-center">NATIONAL CONSTRUCTION AUTHORITY</h2>
     <div class="row my-5">
-        <div class="col-md-8 col-sm-12 col-xs-12">
-            <div class="row w-100">
+        <div class="col-md-8 col-sm-12 col-xs-12 ml-1">
+            <div class="row">
+                {% if user.is_admin %}
+                    <a href="{% url 'nca-create' %}" class="btn btn-info">Add New NCA Entry<i class="fa fa-plus mx-2"></i></a>
+                {% endif %}
                 <form action="" method="get" class="w-100 my-2">
                     <input type="text" name="q" class="form-control" placeholder="ID Number or Processing Status">
                 </form>
@@ -34,11 +37,7 @@
         </div>
 
         <div class="col-md-4">
-            <div class="row mb-2 mx-1">
-                {% if user.is_admin %}
-                <a href="{% url 'nca-create' %}" class="btn btn-info w-75">Add New NCA Entry<i class="fa fa-plus ml-2"></i></a>
-                {% endif %}
-            
+            <div class="row mb-2 mx-1">            
             <div class="card-deck w-100 mt-2">
                 <div class="card">
                     <div class="card-body">
