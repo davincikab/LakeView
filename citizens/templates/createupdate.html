@@ -6,13 +6,37 @@
 {% load crispy_forms_tags %}
 {% block content %}
 <div class="container my-3 mb-5">
-    <div class="col-md-8 col-sm-12 col-lg-6 mx-2">
-        <p class="text-center">{{ title }}</p>
-        <form class="form-horizontal" method="POST" action="">
-            {% csrf_token %}
-            {{ form|crispy }}
-            <input type="submit" value="{{title}}" class="btn btn-success mt-2">
-        </form>
+    <div class="row">
+        {% if form.citizen %}
+        <div class="col-md-3 mt-2">
+            <p>Search Citizen</p>
+            <form action="" class="parent my-2">
+                <!-- Search students  -->
+                <input type="text" placeholder="Parent ID" class="form-control" name='parent'>
+            </form>
+            <div class="parent-result">
+                <a href="{% url 'citizen-create' %}">Add a Parent</a>
+            </div>
+        </div>
+        {% endif %}
+        <div class="col-md-7 col-sm-12 col-lg-6 mx-2">
+            <p class="text-center">{{ title }}</p>
+            <form class="form-horizontal" method="POST" action="">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <input type="submit" value="{{title}}" class="btn btn-success mt-2">
+            </form>
+        </div>
     </div>
 </div>
+{% endblock %}
+{% block javascript %}
+<script>
+    $(function () {
+        $('.parent').on('submit', function (e) {
+            e.preventDefault();
+            getParent($(this).serialize(), '.parent-result', '#id_citizen');
+        });
+    });
+</script>
 {% endblock %}

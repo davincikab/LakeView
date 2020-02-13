@@ -154,8 +154,11 @@
                                 <div class="inner">
                                     <h5 class="text">{{ member.citizen.person.get_person }}</h5>
                                     <p class="subtitle">{{ member.role }}</p>
-                                    <div class="avatar"><img src="{% get_static_prefix %}{{ member.picture }}" alt="" class="img-responsive img-circle" /></div>
+                                    <div class="avatar">
+                                        <img src="{% get_static_prefix %}{{ member.picture }}" alt="profile" class="img-responsive img-circle" />
+                                    </div>
                                     <p class="mt-2">{{ member.area_allocated }}</p>
+                                    <p>{{ member.citizen.phone_number }}</p>
                                 </div>
                             </div>
                         </div>
@@ -170,18 +173,31 @@
             <div class="row mx-5 my-2 bg-white">
                 <div class="col-md-4">
                     <h5 class="text">Phone Number</h5>
-                    <p class="text-black">+254 704893840</p>
                 </div>
                 <div class="col-md-4">
                     <h5 class="text">Email Address</h5>
-                    <p class="">+254 704893840</p>
                 </div>
                 <div class="col-md-4">
                     <h5 class="text">Physical Address</h5>
-                    <p class="">Adams Building along Naivasha - Nairobi Highway</p>
                 </div>
+                {% for contact in contacts %}
+                    <div class="col-md-4">
+                        <p class="text-black">{{ contact.phone_number }}</p>
+                    </div>
+                    <div class="col-md-4">
+                        <p class=""> {{ contact.email }}</p>
+                    </div>
+                    <div class="col-md-4">
+                        <p class="">{{ contact.physical_address }}</p>
+                    </div>
+                    {% if user.is_admin %}
+                        <a href="/admin/citizens/contacts/{{contact.pk}}/change/" class=""> <i class="fa fa-pen"></i> Update</a>
+                    {% endif %}
+                {% endfor %}
             </div>
+           
         </div>
+        
     </div>
 {% endblock %}
 {% block javascript %}

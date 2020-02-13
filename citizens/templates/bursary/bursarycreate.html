@@ -50,75 +50,16 @@
 
         $('.student').on('submit', function (e) {
             e.preventDefault();
-            getStudent($(this).serialize());
+            getStudent($(this).serialize(), '.student-result', '#id_student');
         });
 
          $('.parent').on('submit', function (e) {
             e.preventDefault();
-            getParent($(this).serialize());
-        });
-
-        function getParent(data) {
-            $.ajax({
-                url: '/citizen/search/',
-                data: data,
-                type: 'GET',
-                success: function (response) {
-                    var res = JSON.parse(response);
-                    $('.parent-result').empty();
-                    //Populate the results 
-                    console.log(res);
-                    res.forEach(element => {
-                        $('.parent-result').append(
-                            `<li class="list-group-item">${element.pk}</li>`
-                        );
-                    });
-
-                    parent_list = document.querySelectorAll('.parent-result li');
-                    parent_list.forEach(el => {
-                        $(el).on('click', function (e) {
-                            console.log($(this).text());
-                            $('#id_parent').val($(this).text());
-                        });
-                    });
-                },
-                error: function (e) {
-                    alert("Failed to submit the data try again");
-                }
-            });
-        }
-
-        function getStudent(data) {
-            $.ajax({
-                url: '/student/search/',
-                data: data,
-                type: 'GET',
-                success: function (response) {
-                    var res = JSON.parse(response);
-                     $('.student-result').empty();
-                    //Populate the results 
-                    console.log(res);
-                    res.forEach(element => {
-                         $('.student-result').append(
-                            `<li class="list-group-item">${element.pk} ${element.fields.admission_number} ${element.fields.school}</li>`
-                         );
-                    });
-
-                    student_list = document.querySelectorAll('.student-result li');
-                    student_list.forEach(el => {
-                        $(el).on('click', function(e){
-                            console.log($(this).text());
-                            var student_value = $(this).text().split(' ')[0]
-                            $('#id_student').val(student_value);
-                        });
-                    });                 
-                   
-                },
-                error: function (e) {
-                    alert("Failed to submit the data try again");
-                }
-            });
-        }
+            getParent($(this).serialize(), '.parent-result', '#id_parent');
+        }); 
+       //getParent(data, '.parent-result', '#id_parent');
+        //getStudent(data, '.student-result', '#id_student');
+        
 
     });
 </script>

@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import Messages, Citizen, Group, GroupEvents, College, Person, NCA,Nhif, SelfHelpGroup
-from .models import Student, Events, Project, Bursary, Results, CuriculumVitae, TeamMembers,Testimonials
+from .models import Student, Events, Project, Bursary, Results, CuriculumVitae,\
+     TeamMembers,Testimonials,Contacts
 
 admin.site.register(Person)
 admin.site.register(Citizen)
@@ -19,4 +20,5 @@ admin.site.register(Results)
 admin.site.register(CuriculumVitae)
 admin.site.register(TeamMembers)
 admin.site.register(Testimonials)
+admin.site.register(Contacts)
 # Register your models here.

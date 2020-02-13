@@ -21,7 +21,8 @@ from django.db.models import Q
 
 from .models import Citizen, Messages, Group, GroupEvents, Bursary, \
     CuriculumVitae, College, Project, Person,NCA,Nhif, SelfHelpGroup,\
-    Student, SponsoredStudent, Events, TeamMembers, Person, Results, Testimonials
+    Student, SponsoredStudent, Events, TeamMembers, Person, Results, \
+    Testimonials, Contacts
 
 from django.forms import formset_factory
 from .forms import StudentForm, PersonForm, CitizenForm, ResultsForm
@@ -38,8 +39,8 @@ def home(request):
     team_members = TeamMembers.objects.all()
     testimonials = Testimonials.objects.all()[:5]
     values = [index for index, item in enumerate(testimonials)]
-    print(values)
-    return render(request,'index.html', {'events':events,'teams':team_members,'testimonials':testimonials,'values':values})
+    contacts = Contacts.objects.all()
+    return render(request,'index.html', {'events':events,'teams':team_members,'testimonials':testimonials,'values':values,'contacts':contacts})
 
 
 class CitizenListView(LoginRequiredMixin, ListView):

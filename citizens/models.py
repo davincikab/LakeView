@@ -338,6 +338,22 @@ class Testimonials(models.Model):
     
     def __str__(self):
         return self.name
+
+class Contacts(models.Model):
+    phone_number = models.CharField(max_length=50)
+    email = models.EmailField(max_length=254)
+    physical_address = models.CharField(max_length=100)
+
+    class Meta:
+        verbose_name = "Contact"
+        verbose_name_plural = "Contacts"
+
+    def __str__(self):
+        return self.phone_number
+    
+    def get_absolute_url(self):
+        return reverse("home")
+    
 # class Reports(models.Model):
 #     week = models.CharField(max_length=50)
 
